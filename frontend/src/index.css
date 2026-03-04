@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --color-primary: #14522d;
+  --color-primary-light: #1f7a43;
+  --color-primary-dark: #0a2916;
+  --color-secondary: #facc15;
+  --color-accent-yellow: #FFC107;
+  --color-accent-leaf: #678372;
+  --color-neutral-surface: #f1f4f2;
+  --color-background-light: #f6f8f7;
+  --color-background-dark: #131f18;
+  --radius-DEFAULT: 1rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+  --shadow-soft-green: 0 10px 40px -10px rgba(20, 82, 45, 0.15);
+  --shadow-glow: 0 0 15px rgba(255, 193, 7, 0.4);
+}
+
+.card-hover-lift{transition:transform .3s ease,box-shadow .3s ease}
+.card-hover-lift:hover{transform:translateY(-8px);box-shadow:0 20px 40px -5px rgba(20,82,45,.2)}
+.leaf-pattern{background-color:var(--color-background-light);background-image:radial-gradient(var(--color-primary) .5px,transparent .5px),radial-gradient(var(--color-primary) .5px,var(--color-background-light) .5px);background-size:20px 20px;background-position:0 0,10px 10px;opacity:.1}
+.dark .leaf-pattern{background-color:var(--color-background-dark);background-image:radial-gradient(var(--color-primary-light) .5px,transparent .5px),radial-gradient(var(--color-primary-light) .5px,var(--color-background-dark) .5px)}
