@@ -154,14 +154,20 @@ function App() {
                 : menu.filter((i) => i.active).slice(0, 3)
               ).map((i) => (
                 <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
-                  {i.unliRice && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
+                  <div className="absolute top-4 right-4 z-10 flex flex-wrap justify-end gap-2">
+                    {i.bestSeller && (
+                      <span className="inline-flex items-center gap-1 bg-amber-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
+                        <span className="material-symbols-outlined text-[14px]">star</span>
+                        BEST SELLER
+                      </span>
+                    )}
+                    {i.unliRice && (
+                      <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20">
                         <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
                         UNLI RICE
                       </span>
-                    </div>
-                  )}
+                    )}
+                  </div>
                   <div className="relative h-64 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
                     <img src={i.image} alt={i.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />

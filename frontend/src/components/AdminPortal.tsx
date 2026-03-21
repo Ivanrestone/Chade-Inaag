@@ -19,6 +19,8 @@ const demoEmail = "admin@gmail.com";
 const demoPassword = "admin123";
 const authStorageKey = "change_inaag_admin_auth";
 
+const categories = ["Chicken", "Pork", "Beef", "Fish", "Seafood", "BBQ", "Dessert", "Drinks", "Other"];
+
 const initialMenuItems: MenuItem[] = [
   {
     id: 1,
@@ -118,7 +120,7 @@ export default function AdminPortal() {
   const [adminEmail, setAdminEmail] = useState("");
   const [newItem, setNewItem] = useState<Omit<MenuItem, "id">>({
     name: "",
-    category: "",
+    category: "Chicken",
     description: "",
     price: 0,
     active: true,
@@ -277,7 +279,7 @@ export default function AdminPortal() {
         setMenuItems((current) => [created, ...current]);
         setNewItem({
           name: "",
-          category: "",
+          category: "Chicken",
           description: "",
           price: 0,
           active: true,
@@ -497,30 +499,55 @@ export default function AdminPortal() {
                 <p className="text-slate-500">Manage food items, update pricing, and control item availability.</p>
               </header>
 
-              <form className="grid grid-cols-1 gap-3 md:grid-cols-6 items-end rounded-2xl border border-slate-200 bg-white p-4" onSubmit={addItem}>
-                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm" placeholder="Name" value={newItem.name} onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} />
-                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm" placeholder="Category" value={newItem.category} onChange={(e) => setNewItem({ ...newItem, category: e.target.value })} />
-                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm" placeholder="Price" type="number" value={newItem.price} onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })} />
-                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm md:col-span-2" placeholder="Description" value={newItem.description} onChange={(e) => setNewItem({ ...newItem, description: e.target.value })} />
-                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm md:col-span-2" placeholder="Image URL" value={newItem.image} onChange={(e) => setNewItem({ ...newItem, image: e.target.value })} />
-                <div className="flex flex-wrap gap-4 md:col-span-2">
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={newItem.active} onChange={(e) => setNewItem({ ...newItem, active: e.target.checked })} />
-                    <span className="text-sm">Active</span>
+              <form className="grid grid-cols-1 gap-4 md:grid-cols-12 items-end rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" onSubmit={addItem}>
+                <div className="md:col-span-3 space-y-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Food Name</label>
+                  <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="e.g. Z1 Paa" value={newItem.name} onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} required />
+                </div>
+                <div className="md:col-span-2 space-y-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Category</label>
+                  <select className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" value={newItem.category} onChange={(e) => setNewItem({ ...newItem, category: e.target.value })} required>
+                    <option value="" disabled>Select...</option>
+                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div className="md:col-span-2 space-y-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-primary-dark font-black ml-1">Price (₱)</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">₱</span>
+                    <input className="h-11 w-full rounded-xl border-2 border-primary/20 bg-primary/5 pl-7 pr-3 text-sm font-bold text-primary-dark focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" type="number" value={newItem.price} onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })} required />
+                  </div>
+                </div>
+                <div className="md:col-span-5 space-y-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Short Description</label>
+                  <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Describe the food..." value={newItem.description} onChange={(e) => setNewItem({ ...newItem, description: e.target.value })} required />
+                </div>
+                <div className="md:col-span-6 space-y-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Image URL</label>
+                  <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Paste image link here..." value={newItem.image} onChange={(e) => setNewItem({ ...newItem, image: e.target.value })} required />
+                </div>
+                <div className="md:col-span-4 flex items-center justify-between gap-2 h-11 bg-slate-50 rounded-xl px-4 border border-slate-100">
+                  <label className="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 transition-all cursor-pointer" checked={newItem.active} onChange={(e) => setNewItem({ ...newItem, active: e.target.checked })} />
+                    <span className="text-[11px] font-bold uppercase text-slate-600 group-hover:text-primary transition-colors">Active</span>
                   </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={newItem.unliRice} onChange={(e) => setNewItem({ ...newItem, unliRice: e.target.checked })} />
-                    <span className="text-sm">Unli Rice</span>
+                  <div className="w-px h-4 bg-slate-200"></div>
+                  <label className="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 transition-all cursor-pointer" checked={newItem.unliRice} onChange={(e) => setNewItem({ ...newItem, unliRice: e.target.checked })} />
+                    <span className="text-[11px] font-bold uppercase text-slate-600 group-hover:text-primary transition-colors">Unli Rice</span>
                   </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={newItem.bestSeller} onChange={(e) => setNewItem({ ...newItem, bestSeller: e.target.checked })} />
-                    <span className="text-sm">Best Seller</span>
+                  <div className="w-px h-4 bg-slate-200"></div>
+                  <label className="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-amber-500 focus:ring-amber-500/20 transition-all cursor-pointer" checked={newItem.bestSeller} onChange={(e) => setNewItem({ ...newItem, bestSeller: e.target.checked })} />
+                    <span className="text-[11px] font-bold uppercase text-slate-600 group-hover:text-amber-500 transition-colors">Best Seller</span>
                   </label>
                 </div>
-                <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-light md:col-span-2">
-                  <span className="material-symbols-outlined text-[18px]">save</span>
-                  Save Item
-                </button>
+                <div className="md:col-span-2">
+                  <button type="submit" className="h-11 w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary-light hover:-translate-y-0.5 active:translate-y-0 transition-all">
+                    <span className="material-symbols-outlined text-[18px]">add_task</span>
+                    Add
+                  </button>
+                </div>
               </form>
 
               <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -572,42 +599,56 @@ export default function AdminPortal() {
                       </div>
                       <div className="flex flex-wrap gap-2">
                         <button
-                          className={`inline-flex h-8 items-center rounded-full px-3 text-[10px] font-bold uppercase tracking-wide transition ${
-                            item.unliRice ? "bg-primary/10 text-primary border border-primary/20" : "bg-slate-100 text-slate-500 border border-transparent"
+                          className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-wider transition-all border ${
+                            item.unliRice 
+                              ? "bg-primary text-white border-transparent shadow-md shadow-primary/20" 
+                              : "bg-slate-50 text-slate-400 border-slate-200 opacity-60 hover:opacity-100"
                           }`}
                           onClick={() => toggleUnliRice(item.id)}
                         >
+                          <span className="material-symbols-outlined text-[14px]">{item.unliRice ? 'check_circle' : 'circle'}</span>
                           Unli Rice
                         </button>
                         <button
-                          className={`inline-flex h-8 items-center rounded-full px-3 text-[10px] font-bold uppercase tracking-wide transition ${
-                            item.bestSeller ? "bg-amber-100 text-amber-700 border border-amber-200" : "bg-slate-100 text-slate-500 border border-transparent"
+                          className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-wider transition-all border ${
+                            item.bestSeller 
+                              ? "bg-amber-500 text-white border-transparent shadow-md shadow-amber-500/20" 
+                              : "bg-slate-50 text-slate-400 border-slate-200 opacity-60 hover:opacity-100"
                           }`}
                           onClick={() => toggleBestSeller(item.id)}
                         >
+                          <span className="material-symbols-outlined text-[14px]">{item.bestSeller ? 'stars' : 'circle'}</span>
                           Best Seller
                         </button>
-                      </div>
-                      <div className="flex items-center justify-between border-t border-slate-100 pt-4">
-                        <label className="flex items-center gap-2">
-                          <span className="text-xs font-semibold text-slate-400">₱</span>
-                          <input
-                            type="number"
-                            className="h-9 w-24 rounded-lg border border-slate-200 bg-slate-50 px-2 text-sm font-bold text-slate-900 outline-none transition focus:border-primary"
-                            value={item.price}
-                            onChange={(event) => updatePrice(item.id, Number(event.target.value))}
-                          />
-                        </label>
                         <button
-                          className={`inline-flex h-9 items-center rounded-full px-3 text-xs font-bold uppercase tracking-wide transition ${
-                            item.active
-                              ? "bg-green-100 text-green-700 hover:bg-green-200"
-                              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                          className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-wider transition-all border ${
+                            item.active 
+                              ? "bg-green-600 text-white border-transparent shadow-md shadow-green-600/20" 
+                              : "bg-red-500 text-white border-transparent shadow-md shadow-red-500/20"
                           }`}
                           onClick={() => toggleItemStatus(item.id)}
                         >
-                          {item.active ? "Active" : "Inactive"}
+                          <span className="material-symbols-outlined text-[14px]">{item.active ? 'visibility' : 'visibility_off'}</span>
+                          {item.active ? "Active" : "Hidden"}
                         </button>
+                      </div>
+                      <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 block ml-1">Current Price</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-primary-dark">₱</span>
+                            <input
+                              type="number"
+                              className="h-10 w-28 rounded-xl border-2 border-primary/10 bg-primary/5 pl-7 pr-3 text-sm font-black text-primary-dark outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+                              value={item.price}
+                              onChange={(event) => updatePrice(item.id, Number(event.target.value))}
+                            />
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Total Display</p>
+                          <p className="text-lg font-black text-slate-900">{currency(item.price)}</p>
+                        </div>
                       </div>
                     </div>
                   </article>
