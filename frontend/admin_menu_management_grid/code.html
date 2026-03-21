@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu Management - CHANGE INAAG</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11d421",
+                        "primary-dark": "#0ea61a",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102212",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a331d",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom toggle switch styles since we can't use JS */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #11d421;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #11d421;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 bg-surface-light dark:bg-surface-dark dark:border-slate-800 lg:flex shrink-0 z-20">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Brand -->
+<div class="flex items-center gap-3 px-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-10 w-10 shadow-sm" data-alt="Change Inaag logo abstract" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCe0hdF8t0oiapWE6ipdKcvQ-Ca3uwbLJJvz6aqHXb6kXtaCNHsWT4pTsaDTyvK3QOTgxRCK3VZmKnp27QyJCSuiRztEtsiHPsqj3vVhR0uC6jt6uzwvujh82gPcHoIWVePiutesxHUVtA4FIjY2iMwZEVux8RJWV9PqyOWnHHR3pmLGGfk2VSXa7tkpRaCO0ibdY54ItuqkIjFuF1BsHs50-ccC3qkLP6p2JYoD01d_6MqxIjzwXVwTHGxKS_5MR32SM2jJ_f66aw");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-normal">CHANGE INAAG</h1>
+<p class="text-primary text-xs font-medium uppercase tracking-wide">Admin Panel</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-1">
+<a class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary dark:text-slate-500">grid_view</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="group flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined fill-1">restaurant_menu</span>
+<span class="text-sm font-bold">Menu Management</span>
+</a>
+<a class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary dark:text-slate-500">shopping_bag</span>
+<span class="text-sm font-medium">Orders</span>
+<span class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+</a>
+<a class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary dark:text-slate-500">calendar_month</span>
+<span class="text-sm font-medium">Reservations</span>
+</a>
+<a class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary dark:text-slate-500">group</span>
+<span class="text-sm font-medium">Customers</span>
+</a>
+<a class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary dark:text-slate-500">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<!-- User Profile -->
+<div class="mt-auto border-t border-slate-100 pt-4 dark:border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img alt="User Avatar" class="h-full w-full object-cover" data-alt="Admin user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQDXDFLKBngeRDIesOwu0XtmU0PMeXZeZ2Bw5x4lEnE4Z4I426Kzn1CYzOQsFbgzlwvPQjYiHRQqVVJfhPySm3Uz8UIpIzRgY7OPbm0rjRJE9OeyC8icOn8HYOIC3oWaRdfhopZpjAQtpBNNB0zYYYgzPhqQfO9Z8d7YyHg4EXlm7pZc9-RqlS5lfvUnFTFUJEhSadWW7lUE0UK7P5Pa_EbBgI4pGItM-_-ETFasxChxxg_JOndGZy0uSVtBOMeqkwEdu8sN0Begs"/>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Admin User</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Manager</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto">
+<!-- Header/Top Bar -->
+<header class="sticky top-0 z-10 flex w-full flex-col gap-4 border-b border-slate-200 bg-surface-light/95 px-6 py-4 backdrop-blur dark:bg-surface-dark/95 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Menu Items</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400">Manage your restaurant's food items and availability</p>
+</div>
+<button class="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-primary/20 hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                    Add New Item
+                </button>
+</header>
+<!-- Filters & Search Area -->
+<div class="flex flex-col gap-4 p-6 pb-2">
+<!-- Search -->
+<div class="relative w-full max-w-2xl">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-slate-400">search</span>
+</div>
+<input class="block w-full rounded-xl border-0 bg-white py-3 pl-10 pr-4 text-slate-900 ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-slate-800 dark:text-white dark:ring-slate-700 dark:focus:ring-primary shadow-sm" placeholder="Search menu items (e.g. 'Lechon', 'Sisig')..." type="text"/>
+</div>
+<!-- Filter Pills -->
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[18px] text-slate-400">category</span>
+                        Category: <span class="text-slate-900 dark:text-white font-bold ml-1">All</span>
+<span class="material-symbols-outlined text-[18px] text-slate-400">expand_more</span>
+</div>
+<div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[18px] text-slate-400">check_circle</span>
+                        Status: <span class="text-slate-900 dark:text-white font-bold ml-1">Any</span>
+<span class="material-symbols-outlined text-[18px] text-slate-400">expand_more</span>
+</div>
+<div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[18px] text-slate-400">sort</span>
+                        Sort By: <span class="text-slate-900 dark:text-white font-bold ml-1">Popularity</span>
+<span class="material-symbols-outlined text-[18px] text-slate-400">expand_more</span>
+</div>
+<button class="ml-auto text-sm text-primary font-semibold hover:text-primary-dark">
+                        Clear Filters
+                    </button>
+</div>
+</div>
+<!-- Grid Content -->
+<div class="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+<!-- Card 1 -->
+<div class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-surface-dark">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Z1 Paa grilled chicken dish" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRGT_WYE2Kgck7s2qOLkniIrEE06FlZ_hg4SsnsoUK9W7I5nDQ_j9AOEFq1q_NIcOxzbODncq0fVLG0YgUgEAnr3qB0UybzIhLOI58bCxilcwAtvOfYu9yHWkhwAKX5I5M0Ok5BuRAi3E9IMV2l2PSVGlBSrDLckI5sg2PVoNNNX3HRvCytruFgMnrIdRpITmKK0tADjuT13FmSHqg1fzRqkg8mnMv5so_ahr8WszcJqga-TViGk1GG-3wRSF1p9KGTNP8NZSOXsA');"></div>
+<div class="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 shadow-sm backdrop-blur dark:bg-black/50 cursor-pointer hover:bg-white dark:hover:bg-black/70 transition-colors">
+<span class="material-symbols-outlined block text-[20px] text-slate-600 dark:text-white">more_vert</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-bold text-white backdrop-blur">
+                            Chicken
+                        </div>
+</div>
+<div class="flex flex-1 flex-col p-4">
+<div class="flex items-start justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white line-clamp-1">Z1 Paa</h3>
+</div>
+<p class="mb-4 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">Our signature grilled chicken leg quarter marinated in special spices.</p>
+<div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-700">
+<div class="flex items-center gap-1">
+<span class="text-xs font-semibold text-slate-400">₱</span>
+<input class="w-16 rounded border-0 bg-slate-50 px-1 py-0.5 text-sm font-bold text-slate-900 focus:ring-1 focus:ring-primary dark:bg-slate-800 dark:text-white" type="number" value="135"/>
+</div>
+<!-- Toggle Switch -->
+<div class="flex items-center gap-2">
+<span class="text-[10px] uppercase font-bold text-primary">Active</span>
+<label class="relative inline-flex cursor-pointer items-center" for="toggle1">
+<input checked="" class="peer sr-only" id="toggle1" type="checkbox"/>
+<div class="h-5 w-9 rounded-full bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 dark:bg-slate-700 peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-surface-dark">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Lechon Sisig pork dish" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDPkbG5YUiRE493f1we6NSeGqwRKWTvKGBIFxdjXNM-Tqa5D2nASmR5AV04WmbQmHiKHzyuSjIv4kJk6oWuiBwJiZ2JlJOMbAbdfa1IZzqzgd0ELuGPHBxEUpkPJFnqcSKL6hLZ31vPs_4AErUadPh_qxekqtMCuEeX1ZAORrk_jSDVvLkD2TAwBZp1_anYw9DZF-3T3NFfyWrb5WjKTfSQ8d2QpdRTcFCRWzO6vtZPR1oeEwAczUSEgv5lci0CUj-ygZXHLIlEk0');"></div>
+<div class="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 shadow-sm backdrop-blur dark:bg-black/50 cursor-pointer hover:bg-white dark:hover:bg-black/70 transition-colors">
+<span class="material-symbols-outlined block text-[20px] text-slate-600 dark:text-white">more_vert</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-bold text-white backdrop-blur">
+                            Pork
+                        </div>
+</div>
+<div class="flex flex-1 flex-col p-4">
+<div class="flex items-start justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white line-clamp-1">Lechon Sisig</h3>
+</div>
+<p class="mb-4 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">Crispy pork belly chopped with onions, chillies and citrus.</p>
+<div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-700">
+<div class="flex items-center gap-1">
+<span class="text-xs font-semibold text-slate-400">₱</span>
+<input class="w-16 rounded border-0 bg-slate-50 px-1 py-0.5 text-sm font-bold text-slate-900 focus:ring-1 focus:ring-primary dark:bg-slate-800 dark:text-white" type="number" value="210"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] uppercase font-bold text-primary">Active</span>
+<label class="relative inline-flex cursor-pointer items-center" for="toggle2">
+<input checked="" class="peer sr-only" id="toggle2" type="checkbox"/>
+<div class="h-5 w-9 rounded-full bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 dark:bg-slate-700 peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-surface-dark">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Special Halo-Halo dessert" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAR4Ad6ELk_KKcEyxlleNo1NWtftPiolPx2xKLtH7n9hQs5FBdpRM-nEMzok-4W76iBl8yo8ygYGHrnFFb82bGjSoTt0RRUzuy7RY0CuIvuWCcbyHpLTfeIWjnT_ny1X3OUbKEg9M-HRzEDv4z9irCGn3DPbNvj9H5rTHonJMqM2HSiDkAUqE1pSVWCXcGLo-n1-AIfJYMVyggJl643hY_3QAr8GkqdfskWRao4w0mv3yitDNpyWvp-gU0__R_oXn1QTleTWucO7SU');"></div>
+<div class="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 shadow-sm backdrop-blur dark:bg-black/50 cursor-pointer hover:bg-white dark:hover:bg-black/70 transition-colors">
+<span class="material-symbols-outlined block text-[20px] text-slate-600 dark:text-white">more_vert</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-bold text-white backdrop-blur">
+                            Dessert
+                        </div>
+</div>
+<div class="flex flex-1 flex-col p-4">
+<div class="flex items-start justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white line-clamp-1">Special Halo-Halo</h3>
+</div>
+<p class="mb-4 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">Mixed fruits, beans, jelly, shaved ice and ube ice cream.</p>
+<div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-700">
+<div class="flex items-center gap-1">
+<span class="text-xs font-semibold text-slate-400">₱</span>
+<input class="w-16 rounded border-0 bg-slate-50 px-1 py-0.5 text-sm font-bold text-slate-900 focus:ring-1 focus:ring-primary dark:bg-slate-800 dark:text-white" type="number" value="120"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] uppercase font-bold text-slate-400">Inactive</span>
+<label class="relative inline-flex cursor-pointer items-center" for="toggle3">
+<input class="peer sr-only" id="toggle3" type="checkbox"/>
+<div class="h-5 w-9 rounded-full bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 dark:bg-slate-700 peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-surface-dark">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Liempo grilled pork belly" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCImN76IqbRcxzkdvZt281-J2s3PP7Sd-i39RdHEE8ZBl3_97QCXue6R8IfbUx0Ow1OOEEmrIG1YsUjOrATtHxoWVuBvuszVm3Q80_dQEifTLbXgcRedWMpRsNueQE4WPM4sVOnLawEQSjrHCYfiNq6dyAKMYp5iaCWsCkq7wShupKkdbagduioWclrMzQxMUfKk3NmNq3NOZ7639JP-uJBtMkBmM1YPc1G98QgzlYiP7Ygarr48DgSxWUggtPYvJ4R7qYH6dFiZ78');"></div>
+<div class="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 shadow-sm backdrop-blur dark:bg-black/50 cursor-pointer hover:bg-white dark:hover:bg-black/70 transition-colors">
+<span class="material-symbols-outlined block text-[20px] text-slate-600 dark:text-white">more_vert</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-bold text-white backdrop-blur">
+                            Pork
+                        </div>
+</div>
+<div class="flex flex-1 flex-col p-4">
+<div class="flex items-start justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white line-clamp-1">Liempo</h3>
+</div>
+<p class="mb-4 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">Grilled pork belly seasoned with salt and pepper.</p>
+<div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-700">
+<div class="flex items-center gap-1">
+<span class="text-xs font-semibold text-slate-400">₱</span>
+<input class="w-16 rounded border-0 bg-slate-50 px-1 py-0.5 text-sm font-bold text-slate-900 focus:ring-1 focus:ring-primary dark:bg-slate-800 dark:text-white" type="number" value="180"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] uppercase font-bold text-primary">Active</span>
+<label class="relative inline-flex cursor-pointer items-center" for="toggle4">
+<input checked="" class="peer sr-only" id="toggle4" type="checkbox"/>
+<div class="h-5 w-9 rounded-full bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 dark:bg-slate-700 peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-surface-dark">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Whole Lechon Manok roasted chicken" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2OsGv2Aw26vAsX8CLhYz5yY7vxMZzFVGVzCueBdK-WZuRTBDMF5lWJJNy8sGriwyhFc9nP___PwGjfO2BrFhRbEvF21CbPc7IZsNWv79Cmqi67Zpf5S4kU5sUgollHP4y90Qatz15BMk0GxhuvGujIGuqk3bmI3jzpAEDM-Dl-BvasA9E3VaP2eE9WB-KOuhmE3w_ZPAD-2RhaW__YzkfSbAx02FYJbYvY7pGESByU4ZcfVIdwVgjRqn3e5MLIvWBt0pxBeEjLMY');"></div>
+<div class="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 shadow-sm backdrop-blur dark:bg-black/50 cursor-pointer hover:bg-white dark:hover:bg-black/70 transition-colors">
+<span class="material-symbols-outlined block text-[20px] text-slate-600 dark:text-white">more_vert</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-bold text-white backdrop-blur">
+                            Chicken
+                        </div>
+</div>
+<div class="flex flex-1 flex-col p-4">
+<div class="flex items-start justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white line-clamp-1">Whole Lechon Manok</h3>
+</div>
+<p class="mb-4 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">Whole roasted chicken with lemongrass and spices.</p>
+<div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-700">
+<div class="flex items-center gap-1">
+<span class="text-xs font-semibold text-slate-400">₱</span>
+<input class="w-16 rounded border-0 bg-slate-50 px-1 py-0.5 text-sm font-bold text-slate-900 focus:ring-1 focus:ring-primary dark:bg-slate-800 dark:text-white" type="number" value="340"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] uppercase font-bold text-primary">Active</span>
+<label class="relative inline-flex cursor-pointer items-center" for="toggle5">
+<input checked="" class="peer sr-only" id="toggle5" type="checkbox"/>
+<div class="h-5 w-9 rounded-full bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 dark:bg-slate-700 peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-surface-dark">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Garlic Rice Platter side dish" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC69vaKGE6nwJ-KnI5AXbkUSI39drsLzhsh1RTAXC_YR2el3apZkonM91COEWAlIBLN-ta6oYr-rfKZ8HcKLfPpuCghvb_3kvVMNqruv0iVQWfr8VlUF-9_zZD3OvSZmFBa0W4arBgcntsRF4g0yZPddn8KtHOGrik8CjcewdvibmmVGiLxWkFk-huJ32yLEHAnkSe-trLvVWZ9WUArrDdZEoIQJrKEpS3f6U92meJijQ8OVv1aFNRbt0wufT9CWO6PFfqEKP0T-fQ');"></div>
+<div class="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 shadow-sm backdrop-blur dark:bg-black/50 cursor-pointer hover:bg-white dark:hover:bg-black/70 transition-colors">
+<span class="material-symbols-outlined block text-[20px] text-slate-600 dark:text-white">more_vert</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-bold text-white backdrop-blur">
+                            Sides
+                        </div>
+</div>
+<div class="flex flex-1 flex-col p-4">
+<div class="flex items-start justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white line-clamp-1">Garlic Rice Platter</h3>
+</div>
+<p class="mb-4 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">Fried rice with lots of garlic chips. Good for 3-4 pax.</p>
+<div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-700">
+<div class="flex items-center gap-1">
+<span class="text-xs font-semibold text-slate-400">₱</span>
+<input class="w-16 rounded border-0 bg-slate-50 px-1 py-0.5 text-sm font-bold text-slate-900 focus:ring-1 focus:ring-primary dark:bg-slate-800 dark:text-white" type="number" value="110"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] uppercase font-bold text-primary">Active</span>
+<label class="relative inline-flex cursor-pointer items-center" for="toggle6">
+<input checked="" class="peer sr-only" id="toggle6" type="checkbox"/>
+<div class="h-5 w-9 rounded-full bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 dark:bg-slate-700 peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Add New Placeholder Card -->
+<div class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 transition-all hover:border-primary hover:bg-primary/5 cursor-pointer dark:border-slate-600 dark:bg-transparent dark:hover:border-primary">
+<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Add New Item</h3>
+<p class="text-center text-xs text-slate-500 mt-1 dark:text-slate-400">Create a new dish or variant</p>
+</div>
+</div>
+</main>
+</div>
+</body></html>

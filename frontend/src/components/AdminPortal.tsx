@@ -1,0 +1,437 @@
+import { useMemo, useState } from "react";
+import type { FormEvent } from "react";
+
+type DashboardPage = "overview" | "menu";
+
+type MenuItem = {
+  id: number;
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  active: boolean;
+  image: string;
+};
+
+const demoEmail = "admin@gmail.com";
+const demoPassword = "admin123";
+const authStorageKey = "change_inaag_admin_auth";
+
+const initialMenuItems: MenuItem[] = [
+  {
+    id: 1,
+    name: "Z1 Paa",
+    category: "Chicken",
+    description: "Signature grilled chicken leg quarter with unlimited rice.",
+    price: 99,
+    active: true,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAjGO8S2Ah2D3OOfKJNRya7FFJLZvePuShMjk7DYYtGzHAyfBmemT3rIoq1iddox66iRU3rrjNYpSHJXTE_UcEEIfanBSiWDrHWcF4StZdJ8xCsNDgbhZlyhoT-Dkgz9xAHNiZkOzCOYOGQ3T2O44ZDbgOiNMK-gU5mzW1-DrMnnqrhdkLObFyC-AHygaVxdKDG_WKdQxCHnMf2d_arBzkRfpyOtiB6KP2W1KH5-nrqKZ1YIPxv1z2qBouXmVKwkBJ4HM-5mJZ5K-w",
+  },
+  {
+    id: 2,
+    name: "Lechon Sisig",
+    category: "Pork",
+    description: "Crunchy pork bits with onions, chili, and calamansi.",
+    price: 99,
+    active: true,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ26EsuyKu_vglDzGWxPAdVthroqZBvHZLUP25eLXN0Qp4Ssjcbvv5OYj9lZ5pRSg1TJH-rIKtYVJ0Qct8NAWQvmWsZ2jod_yl_vR7f12pjX5Fobh7IpRfBJH5Nbe9wu3qhycUQ5pLovikfI0k91REEITQ_fbuNK5jpyjpxj2bWCFfQChtLaxeyVTfXS1ajXQrRJEpvV0jHHWE3I3gAdx3_du1I8CM3NMO8LAd3LSd7bXCxhn8Hd79ojmvRqdaM_hQLJQEyiSegI",
+  },
+  {
+    id: 3,
+    name: "BBQ T1",
+    category: "BBQ",
+    description: "Classic pork barbecue skewers, sweet and savory.",
+    price: 99,
+    active: true,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDmfZ08ILCzI6aF8yAf-p1sG2orGAWfpRyYgtixNbw__FEZ-B1dYyXFJL1JKEiNyHQotd8k9I1BQ69tR154g0TzXNv-ZmAeWp1Cdvb_jcB9Kk3F2bsKymaFHQeQF8fw5EOurBEQwe6thVmdxUiyhqV0R4esO-HL0YykH9WEcyIgoUO0iC-fYupi28vNyZ176dpA6Eqteion3Aa0UidTxD28Q9ZIiSpr3o2zYLcQSkGbrTyTS9b3M5AypgseWR46aYJ1FF6r9D1t-8w",
+  },
+  {
+    id: 4,
+    name: "Special Halo-Halo",
+    category: "Dessert",
+    description: "Creamy shaved ice dessert with leche flan and ube ice cream.",
+    price: 35,
+    active: false,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ",
+  },
+  {
+    id: 5,
+    name: "Tuna Panga",
+    category: "Seafood",
+    description: "Succulent grilled tuna jaw marinated in secret sauce.",
+    price: 160,
+    active: true,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ",
+  },
+  {
+    id: 6,
+    name: "Baby Backribs",
+    category: "Pork",
+    description: "Tender ribs glazed in sweet and savory barbecue sauce.",
+    price: 159,
+    active: true,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuChniK0iPmFqUryVN7FVyFfsDNdlsemFTLWsOaIk-RWzv4RpAYzBG5Won_3tQeFQ4epXRPyQWQx0KvltbNa4Wig5XLa_L7JESHYr9UwyLQ5XFBdSD7iSlaYyoGzD1gZPcjzpwFTVHv6_eymhbZbmdQmP3tBqVzn_fNlYNHfoU85XHzKogzq3yEafE3d1swy-imhIRBcUgDIi1iBj-xfxPok3Tmen_GkIZlt-3RCquYbYqyF2IeAsdZhvWH84_NS9ypgPgKaxlmg1Ag",
+  },
+];
+
+function currency(value: number) {
+  return new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+export default function AdminPortal() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [activePage, setActivePage] = useState<DashboardPage>("overview");
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => window.localStorage.getItem(authStorageKey) === "true",
+  );
+
+  const filteredMenuItems = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    return menuItems.filter((item) => {
+      const textMatch =
+        normalizedQuery.length === 0 ||
+        item.name.toLowerCase().includes(normalizedQuery) ||
+        item.category.toLowerCase().includes(normalizedQuery) ||
+        item.description.toLowerCase().includes(normalizedQuery);
+
+      const statusMatch =
+        statusFilter === "all" ||
+        (statusFilter === "active" && item.active) ||
+        (statusFilter === "inactive" && !item.active);
+
+      return textMatch && statusMatch;
+    });
+  }, [menuItems, query, statusFilter]);
+
+  const activeCount = menuItems.filter((item) => item.active).length;
+  const inactiveCount = menuItems.length - activeCount;
+  const estimatedRevenue = menuItems
+    .filter((item) => item.active)
+    .reduce((sum, item) => sum + item.price, 0);
+
+  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const isValidEmail = email.trim().toLowerCase() === demoEmail;
+    const isValidPassword = password === demoPassword;
+
+    if (!isValidEmail || !isValidPassword) {
+      setError("Invalid credentials. Use the demo admin account.");
+      return;
+    }
+
+    window.localStorage.setItem(authStorageKey, "true");
+    setError("");
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem(authStorageKey);
+    setIsAuthenticated(false);
+    setPassword("");
+    setError("");
+  };
+
+  const updatePrice = (id: number, price: number) => {
+    setMenuItems((current) =>
+      current.map((item) => (item.id === id ? { ...item, price: Number.isNaN(price) ? item.price : price } : item)),
+    );
+  };
+
+  const toggleItemStatus = (id: number) => {
+    setMenuItems((current) => current.map((item) => (item.id === id ? { ...item, active: !item.active } : item)));
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background-light px-6 py-10 md:py-16">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
+          <section className="relative overflow-hidden rounded-3xl bg-primary p-8 text-white shadow-soft-green md:p-12">
+            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-secondary/30 blur-2xl"></div>
+            <div className="absolute -bottom-20 -left-12 h-56 w-56 rounded-full bg-primary-light/40 blur-3xl"></div>
+            <div className="relative z-10 flex h-full flex-col justify-between gap-10">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+                  <span className="material-symbols-outlined text-base">admin_panel_settings</span>
+                  Change Inaag Admin
+                </div>
+                <h1 className="text-4xl font-black leading-tight md:text-5xl">Welcome back, Admin</h1>
+                <p className="max-w-md text-base text-white/85 md:text-lg">
+                  Manage menu items, monitor your dashboard overview, and keep your store information updated.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
+                  <p className="text-xs uppercase tracking-wide text-white/75">Demo Email</p>
+                  <p className="mt-1 font-bold">{demoEmail}</p>
+                </div>
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
+                  <p className="text-xs uppercase tracking-wide text-white/75">Demo Password</p>
+                  <p className="mt-1 font-bold">{demoPassword}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-primary/10 bg-white p-8 shadow-xl md:p-10">
+            <div className="mb-8 space-y-2">
+              <h2 className="text-3xl font-extrabold tracking-tight text-primary-dark">Login</h2>
+              <p className="text-slate-500">Use your admin account to access the dashboard.</p>
+            </div>
+            <form className="space-y-5" onSubmit={handleLogin}>
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-slate-700">Email</span>
+                <input
+                  className="h-12 w-full rounded-xl border border-slate-200 px-4 text-slate-900 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="admin@gmail.com"
+                  autoComplete="email"
+                  required
+                />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-slate-700">Password</span>
+                <input
+                  className="h-12 w-full rounded-xl border border-slate-200 px-4 text-slate-900 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="admin123"
+                  autoComplete="current-password"
+                  required
+                />
+              </label>
+              {error && (
+                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{error}</div>
+              )}
+              <button
+                type="submit"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 font-bold text-white transition hover:bg-primary-light"
+              >
+                <span className="material-symbols-outlined text-[20px]">login</span>
+                Sign In
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background-light text-slate-900">
+      <div className="flex min-h-screen flex-col lg:flex-row">
+        <aside className="w-full bg-primary px-6 py-6 text-white lg:min-h-screen lg:w-72">
+          <div className="mb-8 flex items-center gap-3">
+            <img src="/chadeinaag.jpg" alt="Change Inaag" className="h-10 w-10 rounded-xl" />
+            <div>
+              <h1 className="text-lg font-bold tracking-tight">CHANGE INAAG</h1>
+              <p className="text-xs font-medium text-green-200">Admin Portal</p>
+            </div>
+          </div>
+
+          <nav className="grid grid-cols-2 gap-2 lg:grid-cols-1">
+            <button
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${
+                activePage === "overview" ? "bg-white/15 text-white" : "text-green-100 hover:bg-white/10 hover:text-white"
+              }`}
+              onClick={() => setActivePage("overview")}
+            >
+              <span className="material-symbols-outlined text-[20px]">dashboard</span>
+              Dashboard
+            </button>
+            <button
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${
+                activePage === "menu" ? "bg-white/15 text-white" : "text-green-100 hover:bg-white/10 hover:text-white"
+              }`}
+              onClick={() => setActivePage("menu")}
+            >
+              <span className="material-symbols-outlined text-[20px]">restaurant_menu</span>
+              Menu Management
+            </button>
+          </nav>
+
+          <button
+            className="mt-8 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 text-sm font-semibold transition hover:bg-white/20"
+            onClick={handleLogout}
+          >
+            <span className="material-symbols-outlined text-[18px]">logout</span>
+            Logout
+          </button>
+        </aside>
+
+        <main className="flex-1 px-6 py-8 lg:px-10">
+          {activePage === "overview" ? (
+            <section className="space-y-6">
+              <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-3xl font-extrabold tracking-tight text-primary-dark">Dashboard Overview</h2>
+                  <p className="mt-1 text-slate-500">Quick insights for today&apos;s operations.</p>
+                </div>
+                <button className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-light">
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Add New Food
+                </button>
+              </header>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm font-medium text-slate-500">Total Menu Items</p>
+                  <p className="mt-2 text-3xl font-black text-slate-900">{menuItems.length}</p>
+                </article>
+                <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm font-medium text-slate-500">Items Active</p>
+                  <p className="mt-2 text-3xl font-black text-primary">{activeCount}</p>
+                </article>
+                <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm font-medium text-slate-500">Estimated Ticket Total</p>
+                  <p className="mt-2 text-3xl font-black text-slate-900">{currency(estimatedRevenue)}</p>
+                </article>
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+                  <h3 className="text-lg font-bold text-slate-900">Menu Snapshot</h3>
+                  <button
+                    className="text-sm font-semibold text-primary transition hover:text-primary-light"
+                    onClick={() => setActivePage("menu")}
+                  >
+                    Open Menu Management
+                  </button>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[700px] border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 bg-slate-50">
+                        <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Item</th>
+                        <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Category</th>
+                        <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Price</th>
+                        <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {menuItems.slice(0, 5).map((item) => (
+                        <tr key={item.id} className="border-b border-slate-100 last:border-b-0">
+                          <td className="px-6 py-4 text-sm font-semibold text-slate-900">{item.name}</td>
+                          <td className="px-6 py-4 text-sm text-slate-600">{item.category}</td>
+                          <td className="px-6 py-4 text-sm font-medium text-slate-800">{currency(item.price)}</td>
+                          <td className="px-6 py-4">
+                            <span
+                              className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold ${
+                                item.active
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-slate-100 text-slate-600"
+                              }`}
+                            >
+                              {item.active ? "Active" : "Inactive"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          ) : (
+            <section className="space-y-6">
+              <header className="space-y-1">
+                <h2 className="text-3xl font-extrabold tracking-tight text-primary-dark">Menu Management</h2>
+                <p className="text-slate-500">Manage food items, update pricing, and control item availability.</p>
+              </header>
+
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                <label className="relative md:col-span-2">
+                  <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                  <input
+                    className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+                    placeholder="Search menu items..."
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                  />
+                </label>
+                <select
+                  className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+                  value={statusFilter}
+                  onChange={(event) => setStatusFilter(event.target.value as "all" | "active" | "inactive")}
+                >
+                  <option value="all">Status: All</option>
+                  <option value="active">Status: Active</option>
+                  <option value="inactive">Status: Inactive</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {filteredMenuItems.map((item) => (
+                  <article key={item.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                      <img src={item.image} alt={item.name} className="h-full w-full object-cover transition duration-500 hover:scale-105" />
+                      <span className="absolute bottom-3 left-3 rounded-lg bg-black/65 px-2 py-1 text-xs font-bold text-white">{item.category}</span>
+                    </div>
+                    <div className="space-y-4 p-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-slate-900">{item.name}</h3>
+                        <p className="mt-1 text-sm text-slate-500">{item.description}</p>
+                      </div>
+                      <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                        <label className="flex items-center gap-2">
+                          <span className="text-xs font-semibold text-slate-400">₱</span>
+                          <input
+                            type="number"
+                            className="h-9 w-24 rounded-lg border border-slate-200 bg-slate-50 px-2 text-sm font-bold text-slate-900 outline-none transition focus:border-primary"
+                            value={item.price}
+                            onChange={(event) => updatePrice(item.id, Number(event.target.value))}
+                          />
+                        </label>
+                        <button
+                          className={`inline-flex h-9 items-center rounded-full px-3 text-xs font-bold uppercase tracking-wide transition ${
+                            item.active
+                              ? "bg-green-100 text-green-700 hover:bg-green-200"
+                              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                          }`}
+                          onClick={() => toggleItemStatus(item.id)}
+                        >
+                          {item.active ? "Active" : "Inactive"}
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              {filteredMenuItems.length === 0 && (
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+                  <p className="font-semibold text-slate-700">No items matched your filters.</p>
+                  <p className="mt-1 text-sm text-slate-500">Try another search or set status back to All.</p>
+                </div>
+              )}
+
+              <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600">
+                Active: <span className="font-bold text-primary">{activeCount}</span> · Inactive:{" "}
+                <span className="font-bold text-slate-800">{inactiveCount}</span>
+              </div>
+            </section>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}

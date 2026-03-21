@@ -1,13 +1,24 @@
+import { useState } from "react";
 import FeatureCarousel from "./components/FeatureCarousel";
+import AdminPortal from "./components/AdminPortal";
+import LoginModal from "./components/LoginModal";
 
 function App() {
+  const authStorageKey = "change_inaag_admin_auth";
+  const [showLogin, setShowLogin] = useState(false);
+  const [adminMode, setAdminMode] = useState(() => window.localStorage.getItem(authStorageKey) === "true");
+
+  if (adminMode) {
+    return <AdminPortal />;
+  }
+
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-primary/10 dark:border-primary/20">
         <div className="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
           <a href="#home" className="flex items-center gap-3 text-primary dark:text-white">
             <div className="w-8 h-8 flex items-center justify-center bg-primary rounded-lg text-white">
-              <span className="material-symbols-outlined text-[20px]">restaurant</span>
+              <img src="/chadeinaag.jpg" alt="Restaurant Image" className="w-8 h-8 rounded-lg" />
             </div>
             <span className="text-xl font-bold tracking-tight">CHANGE INAAG</span>
           </a>
@@ -17,10 +28,19 @@ function App() {
             <a className="text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary-light transition-colors" href="#location">Locations</a>
             <a className="text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary-light transition-colors" href="#why">About</a>
           </nav>
-          <a href="#order" className="hidden sm:flex items-center gap-2 bg-primary hover:bg-primary-light text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg shadow-primary/20">
-            <span className="material-symbols-outlined text-[18px]">shopping_bag</span>
-            Order Now
-          </a>
+          <div className="hidden sm:flex items-center gap-2">
+            <button
+              onClick={() => setShowLogin(true)}
+              className="flex items-center gap-2 border-2 border-primary text-primary dark:border-white dark:text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-primary/5 dark:hover:bg-white/10 transition-all"
+            >
+              <span className="material-symbols-outlined text-[18px]">login</span>
+              Login
+            </button>
+            <a href="#order" className="flex items-center gap-2 bg-primary hover:bg-primary-light text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg shadow-primary/20">
+              <span className="material-symbols-outlined text-[18px]">shopping_bag</span>
+              Order Now
+            </a>
+          </div>
         </div>
       </header>
 
@@ -73,7 +93,7 @@ function App() {
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent rounded-full blur-2xl scale-90 translate-y-4"></div>
                 <div className="relative w-full max-w-[600px] aspect-square group">
                   <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-primary/20 rotate-3 hover:rotate-0 transition-all duration-500 ease-out border-4 border-white dark:border-background-dark">
-                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIwRKryhP-6PHrZ_G2sC4L-vwV9F81mnx8u1Xcs2F_CZjj1NaVwp9D9OeA3x-9msSaVChSn1_tRyQm0KrGSP9deKDbPFyuSvyC1DizqZedi7KyiEikdznpOlrsVY7FfWh-7cZIhXnRA8sEL20SCVr4rtGcn5ezmca8AgmkOLxpBdgdUZbLEyLZGWwnS8qtdCOgZNXhjnIwGCFjYpVSQeeaA9pWd1QZyEKngK8fzB4XVgp4z98QAW15Nn1OmcPeivu8NfG-YP_lwHU" alt="Grilled chicken" />
+                    <img src="/paasquare.jpg" alt="Grilled chicken" />
                   </div>
                   <div className="absolute -bottom-6 -left-6 bg-white dark:bg-background-dark p-4 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
                     <div className="bg-secondary/20 p-2 rounded-full text-secondary">
@@ -107,7 +127,7 @@ function App() {
                 </div>
                 <div className="relative h-64 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjGO8S2Ah2D3OOfKJNRya7FFJLZvePuShMjk7DYYtGzHAyfBmemT3rIoq1iddox66iRU3rrjNYpSHJXTE_UcEEIfanBSiWDrHWcF4StZdJ8xCsNDgbhZlyhoT-Dkgz9xAHNiZkOzCOYOGQ3T2O44ZDbgOiNMK-gU5mzW1-DrMnnqrhdkLObFyC-AHygaVxdKDG_WKdQxCHnMf2d_arBzkRfpyOtiB6KP2W1KH5-nrqKZ1YIPxv1z2qBouXmVKwkBJ4HM-5mJZ5K-w" alt="Z1 Paa"/>
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjGO8S2Ah2D3OOfKJNRya7FFJLZvePuShMjk7DYYtGzHAyfBmemT3rIoq1iddox66iRU3rrjNYpSHJXTE_UcEEIfanBSiWDrHWcF4StZdJ8xCsNDgbhZlyhoT-Dkgz9xAHNiZkOzCOYOGQ3T2O44ZDbgOiNMK-gU5mzW1-DrMnnqrhdkLObFyC-AHygaVxdKDG_WKdQxCHnMf2d_arBzkRfpyOtiB6KP2W1KH5-nrqKZ1YIPxv1z2qBouXmVKwkBJ4HM-5mJZ5K-w" alt="Z1 Paa" />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2">
@@ -139,7 +159,7 @@ function App() {
                 </div>
                 <div className="relative h-64 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ26EsuyKu_vglDzGWxPAdVthroqZBvHZLUP25eLXN0Qp4Ssjcbvv5OYj9lZ5pRSg1TJH-rIKtYVJ0Qct8NAWQvmWsZ2jod_yl_vR7f12pjX5Fobh7IpRfBJH5Nbe9wu3qhycUQ5pLovikfI0k91REEITQ_fbuNK5jpyjpxj2bWCFfQChtLaxeyVTfXS1ajXQrRJEpvV0jHHWE3I3gAdx3_du1I8CM3NMO8LAd3LSd7bXCxhn8Hd79ojmvRqdaM_hQLJQEyiSegI" alt="Lechon Sisig"/>
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ26EsuyKu_vglDzGWxPAdVthroqZBvHZLUP25eLXN0Qp4Ssjcbvv5OYj9lZ5pRSg1TJH-rIKtYVJ0Qct8NAWQvmWsZ2jod_yl_vR7f12pjX5Fobh7IpRfBJH5Nbe9wu3qhycUQ5pLovikfI0k91REEITQ_fbuNK5jpyjpxj2bWCFfQChtLaxeyVTfXS1ajXQrRJEpvV0jHHWE3I3gAdx3_du1I8CM3NMO8LAd3LSd7bXCxhn8Hd79ojmvRqdaM_hQLJQEyiSegI" alt="Lechon Sisig" />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2">
@@ -171,7 +191,7 @@ function App() {
                 </div>
                 <div className="relative h-64 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmfZ08ILCzI6aF8yAf-p1sG2orGAWfpRyYgtixNbw__FEZ-B1dYyXFJL1JKEiNyHQotd8k9I1BQ69tR154g0TzXNv-ZmAeWp1Cdvb_jcB9Kk3F2bsKymaFHQeQF8fw5EOurBEQwe6thVmdxUiyhqV0R4esO-HL0YykH9WEcyIgoUO0iC-fYupi28vNyZ176dpA6Eqteion3Aa0UidTxD28Q9ZIiSpr3o2zYLcQSkGbrTyTS9b3M5AypgseWR46aYJ1FF6r9D1t-8w" alt="BBQ T1"/>
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmfZ08ILCzI6aF8yAf-p1sG2orGAWfpRyYgtixNbw__FEZ-B1dYyXFJL1JKEiNyHQotd8k9I1BQ69tR154g0TzXNv-ZmAeWp1Cdvb_jcB9Kk3F2bsKymaFHQeQF8fw5EOurBEQwe6thVmdxUiyhqV0R4esO-HL0YykH9WEcyIgoUO0iC-fYupi28vNyZ176dpA6Eqteion3Aa0UidTxD28Q9ZIiSpr3o2zYLcQSkGbrTyTS9b3M5AypgseWR46aYJ1FF6r9D1t-8w" alt="BBQ T1" />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2">
@@ -226,7 +246,7 @@ function App() {
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">Address</h4>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1">Purok 1, Sayre Highway<br/>Valencia City, Bukidnon, Philippines</p>
+                        <p className="text-gray-600 dark:text-gray-300 mt-1">Purok 1, Sayre Highway<br />Valencia City, Bukidnon, Philippines</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4">
@@ -235,7 +255,7 @@ function App() {
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">Operating Hours</h4>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1">Monday - Sunday<br/>10:00 AM - 9:00 PM</p>
+                        <p className="text-gray-600 dark:text-gray-300 mt-1">Monday - Sunday<br />10:00 AM - 9:00 PM</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4">
@@ -244,7 +264,7 @@ function App() {
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">Contact Us</h4>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1">+63 912 345 6789<br/>hello@chadenanag.com</p>
+                        <p className="text-gray-600 dark:text-gray-300 mt-1">+63 912 345 6789<br />hello@chadenanag.com</p>
                       </div>
                     </div>
                   </div>
@@ -257,7 +277,7 @@ function App() {
               </div>
             </div>
             <div className="w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 relative">
-              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHvLdEiM7DVTHX6CcVSapWeFf9F84ZkScXygOfwJE5enR5gkK0wlES57aZm84uoJbsrAPVLTjX0hux89nIKcja2zMwlvz5XsVrgNn51noI7p665y-KRZ0AHAFqhEuPPtug2WAs-mcVAqIRyuTxbqgxEhqYErLfylVSLlIzva__r5CR9bTgmy8fJGcASjjC_FAZ8vc582qyBxkC9p19hFiRhQkUEgeYlyKvKLWm5C-YIepGzj4h_Y8le7pUNgqsXYJU3mrpOJPYrQA" alt="Map location" className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500"/>
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHvLdEiM7DVTHX6CcVSapWeFf9F84ZkScXygOfwJE5enR5gkK0wlES57aZm84uoJbsrAPVLTjX0hux89nIKcja2zMwlvz5XsVrgNn51noI7p665y-KRZ0AHAFqhEuPPtug2WAs-mcVAqIRyuTxbqgxEhqYErLfylVSLlIzva__r5CR9bTgmy8fJGcASjjC_FAZ8vc582qyBxkC9p19hFiRhQkUEgeYlyKvKLWm5C-YIepGzj4h_Y8le7pUNgqsXYJU3mrpOJPYrQA" alt="Map location" className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500" />
               <a href="https://goo.gl/maps/placeholder" target="_blank" className="absolute bottom-4 right-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                 <span className="material-icons text-primary text-base">directions</span> Get Directions
               </a>
@@ -359,8 +379,19 @@ function App() {
           <p className="text-slate-400 text-sm">© 2026 Change Inaag. All rights reserved.</p>
         </div>
       </footer>
+
+      {showLogin && (
+        <LoginModal
+          onClose={() => setShowLogin(false)}
+          onSuccess={() => {
+            window.localStorage.setItem(authStorageKey, "true");
+            setShowLogin(false);
+            setAdminMode(true);
+          }}
+        />
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
