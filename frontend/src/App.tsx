@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FeatureCarousel from "./components/FeatureCarousel";
 import AdminPortal from "./components/AdminPortal";
 import LoginModal from "./components/LoginModal";
@@ -7,6 +7,24 @@ function App() {
   const authStorageKey = "change_inaag_admin_auth";
   const [showLogin, setShowLogin] = useState(false);
   const [adminMode, setAdminMode] = useState(() => window.localStorage.getItem(authStorageKey) === "true");
+  type MenuItem = {
+    id: number;
+    name: string;
+    category: string;
+    description: string;
+    price: number;
+    active: boolean;
+    image: string;
+  };
+  const [menu, setMenu] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    fetch("/api/menu")
+      .then((r) => r.json())
+      .then((items) => {
+        if (Array.isArray(items)) setMenu(items);
+      });
+  }, []);
 
   if (adminMode) {
     return <AdminPortal />;
@@ -118,101 +136,39 @@ function App() {
           </div>
           <div className="max-w-[1200px] mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
-                    <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
-                    UNLI RICE
-                  </span>
-                </div>
-                <div className="relative h-64 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjGO8S2Ah2D3OOfKJNRya7FFJLZvePuShMjk7DYYtGzHAyfBmemT3rIoq1iddox66iRU3rrjNYpSHJXTE_UcEEIfanBSiWDrHWcF4StZdJ8xCsNDgbhZlyhoT-Dkgz9xAHNiZkOzCOYOGQ3T2O44ZDbgOiNMK-gU5mzW1-DrMnnqrhdkLObFyC-AHygaVxdKDG_WKdQxCHnMf2d_arBzkRfpyOtiB6KP2W1KH5-nrqKZ1YIPxv1z2qBouXmVKwkBJ4HM-5mJZ5K-w" alt="Z1 Paa" />
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Z1 Paa</h3>
-                    <span className="text-xl font-bold text-primary">₱99</span>
+              {menu.filter((i) => i.active).slice(0, 3).map((i) => (
+                <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
+                      <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
+                      UNLI RICE
+                    </span>
                   </div>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">Juicy grilled chicken leg quarter marinated in our signature spices. Served with unlimited rice.</p>
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
-                    <div className="flex gap-1 text-accent-yellow">
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star_half</span>
+                  <div className="relative h-64 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
+                    <img src={i.image} alt={i.name} />
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{i.name}</h3>
+                      <span className="text-xl font-bold text-primary">₱{i.price}</span>
                     </div>
-                    <button className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                      <span className="material-symbols-outlined">add</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
-                    <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
-                    UNLI RICE
-                  </span>
-                </div>
-                <div className="relative h-64 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ26EsuyKu_vglDzGWxPAdVthroqZBvHZLUP25eLXN0Qp4Ssjcbvv5OYj9lZ5pRSg1TJH-rIKtYVJ0Qct8NAWQvmWsZ2jod_yl_vR7f12pjX5Fobh7IpRfBJH5Nbe9wu3qhycUQ5pLovikfI0k91REEITQ_fbuNK5jpyjpxj2bWCFfQChtLaxeyVTfXS1ajXQrRJEpvV0jHHWE3I3gAdx3_du1I8CM3NMO8LAd3LSd7bXCxhn8Hd79ojmvRqdaM_hQLJQEyiSegI" alt="Lechon Sisig" />
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Lechon Sisig</h3>
-                    <span className="text-xl font-bold text-primary">₱99</span>
-                  </div>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">Crunchy pork bits with onions, chili, and calamansi. The ultimate pulutan or meal with unlimited rice.</p>
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
-                    <div className="flex gap-1 text-accent-yellow">
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">{i.description}</p>
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
+                      <div className="flex gap-1 text-accent-yellow">
+                        <span className="material-symbols-outlined text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[18px]">star_half</span>
+                      </div>
+                      <button className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                        <span className="material-symbols-outlined">add</span>
+                      </button>
                     </div>
-                    <button className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                      <span className="material-symbols-outlined">add</span>
-                    </button>
                   </div>
                 </div>
-              </div>
-
-              <div className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
-                    <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
-                    UNLI RICE
-                  </span>
-                </div>
-                <div className="relative h-64 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmfZ08ILCzI6aF8yAf-p1sG2orGAWfpRyYgtixNbw__FEZ-B1dYyXFJL1JKEiNyHQotd8k9I1BQ69tR154g0TzXNv-ZmAeWp1Cdvb_jcB9Kk3F2bsKymaFHQeQF8fw5EOurBEQwe6thVmdxUiyhqV0R4esO-HL0YykH9WEcyIgoUO0iC-fYupi28vNyZ176dpA6Eqteion3Aa0UidTxD28Q9ZIiSpr3o2zYLcQSkGbrTyTS9b3M5AypgseWR46aYJ1FF6r9D1t-8w" alt="BBQ T1" />
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white">BBQ T1</h3>
-                    <span className="text-xl font-bold text-primary">₱99</span>
-                  </div>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">Classic pork barbecue skewers, sweet and savory, grilled to perfection. Comes with unlimited rice.</p>
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
-                    <div className="flex gap-1 text-accent-yellow">
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                      <span className="material-symbols-outlined text-[18px]">star</span>
-                    </div>
-                    <button className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                      <span className="material-symbols-outlined">add</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
             <div className="mt-12 text-center">
               <a href="#best-sellers" className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">

@@ -14,15 +14,26 @@ export default function LoginModal({ onClose, onSuccess }: Props) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const ok = email.trim().toLowerCase() === demoEmail && password === demoPassword;
-    if (!ok) {
-      setError("Invalid credentials. Use the demo admin account.");
-      return;
-    }
     setError("");
-    onSuccess();
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data?.error || "Login failed");
+        return;
+      }
+      window.localStorage.setItem("change_inaag_token", String(data.token));
+      window.localStorage.setItem("change_inaag_admin_auth", "true");
+      onSuccess();
+    } catch {
+      setError("Network error. Please try again.");
+    }
   };
 
   return (

@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import type { FormEvent } from "react";
 
-type DashboardPage = "overview" | "menu";
+type DashboardPage = "overview" | "menu" | "users";
 
 type MenuItem = {
   id: number;
@@ -95,10 +95,47 @@ export default function AdminPortal() {
   const [activePage, setActivePage] = useState<DashboardPage>("overview");
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => window.localStorage.getItem(authStorageKey) === "true",
   );
+  const token = typeof window !== "undefined" ? window.localStorage.getItem("change_inaag_token") || "" : "";
+  const [adminUsers, setAdminUsers] = useState<{ id: string; email: string }[]>([]);
+  const [adminEmail, setAdminEmail] = useState("");
+  const [newItem, setNewItem] = useState<Omit<MenuItem, "id">>({
+    name: "",
+    category: "",
+    description: "",
+    price: 0,
+    active: true,
+    image: "",
+  });
+
+  useEffect(() => {
+    fetch("/api/menu")
+      .then((r) => r.json())
+      .then((items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          setMenuItems(items as MenuItem[]);
+        } else {
+          setMenuItems(initialMenuItems);
+        }
+      })
+      .catch(() => setMenuItems(initialMenuItems));
+  }, []);
+
+  useEffect(() => {
+    if (window.localStorage.getItem(authStorageKey) === "true") {
+      fetch("/api/admin/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((r) => r.json())
+        .then((users) => {
+          if (Array.isArray(users)) setAdminUsers(users);
+        })
+        .catch(() => {});
+    }
+  }, [isAuthenticated]);
 
   const filteredMenuItems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -125,37 +162,84 @@ export default function AdminPortal() {
     .filter((item) => item.active)
     .reduce((sum, item) => sum + item.price, 0);
 
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const isValidEmail = email.trim().toLowerCase() === demoEmail;
-    const isValidPassword = password === demoPassword;
-
-    if (!isValidEmail || !isValidPassword) {
-      setError("Invalid credentials. Use the demo admin account.");
-      return;
-    }
-
-    window.localStorage.setItem(authStorageKey, "true");
     setError("");
-    setIsAuthenticated(true);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data?.error || "Login failed");
+        return;
+      }
+      window.localStorage.setItem("change_inaag_token", String(data.token));
+      window.localStorage.setItem(authStorageKey, "true");
+      setIsAuthenticated(true);
+    } catch {
+      setError("Network error. Please try again.");
+    }
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem(authStorageKey);
+    window.localStorage.removeItem("change_inaag_token");
     setIsAuthenticated(false);
     setPassword("");
     setError("");
   };
 
   const updatePrice = (id: number, price: number) => {
-    setMenuItems((current) =>
-      current.map((item) => (item.id === id ? { ...item, price: Number.isNaN(price) ? item.price : price } : item)),
-    );
+    const next = Number.isNaN(price) ? undefined : price;
+    if (typeof next === "number") {
+      fetch(`/api/menu/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ price: next }),
+      })
+        .then((r) => r.json())
+        .then((updated: MenuItem) => {
+          setMenuItems((current) => current.map((item) => (item.id === id ? updated : item)));
+        });
+    }
   };
 
   const toggleItemStatus = (id: number) => {
-    setMenuItems((current) => current.map((item) => (item.id === id ? { ...item, active: !item.active } : item)));
+    const item = menuItems.find((x) => x.id === id);
+    if (!item) return;
+    fetch(`/api/menu/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ active: !item.active }),
+    })
+      .then((r) => r.json())
+      .then((updated: MenuItem) => {
+        setMenuItems((current) => current.map((x) => (x.id === id ? updated : x)));
+      });
+  };
+
+  const addItem = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    fetch("/api/menu", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(newItem),
+    })
+      .then((r) => r.json())
+      .then((created: MenuItem) => {
+        setMenuItems((current) => [created, ...current]);
+        setNewItem({
+          name: "",
+          category: "",
+          description: "",
+          price: 0,
+          active: true,
+          image: "",
+        });
+      });
   };
 
   if (!isAuthenticated) {
@@ -267,6 +351,15 @@ export default function AdminPortal() {
               <span className="material-symbols-outlined text-[20px]">restaurant_menu</span>
               Menu Management
             </button>
+            <button
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${
+                activePage === "users" ? "bg-white/15 text-white" : "text-green-100 hover:bg-white/10 hover:text-white"
+              }`}
+              onClick={() => setActivePage("users")}
+            >
+              <span className="material-symbols-outlined text-[20px]">group</span>
+              Admin Users
+            </button>
           </nav>
 
           <button
@@ -286,7 +379,7 @@ export default function AdminPortal() {
                   <h2 className="text-3xl font-extrabold tracking-tight text-primary-dark">Dashboard Overview</h2>
                   <p className="mt-1 text-slate-500">Quick insights for today&apos;s operations.</p>
                 </div>
-                <button className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-light">
+                <button className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-light" onClick={() => setActivePage("menu")}>
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   Add New Food
                 </button>
@@ -351,12 +444,28 @@ export default function AdminPortal() {
                 </div>
               </div>
             </section>
-          ) : (
+          ) : activePage === "menu" ? (
             <section className="space-y-6">
               <header className="space-y-1">
                 <h2 className="text-3xl font-extrabold tracking-tight text-primary-dark">Menu Management</h2>
                 <p className="text-slate-500">Manage food items, update pricing, and control item availability.</p>
               </header>
+
+              <form className="grid grid-cols-1 gap-3 md:grid-cols-6 items-end rounded-2xl border border-slate-200 bg-white p-4" onSubmit={addItem}>
+                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm" placeholder="Name" value={newItem.name} onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} />
+                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm" placeholder="Category" value={newItem.category} onChange={(e) => setNewItem({ ...newItem, category: e.target.value })} />
+                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm" placeholder="Price" type="number" value={newItem.price} onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })} />
+                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm md:col-span-2" placeholder="Description" value={newItem.description} onChange={(e) => setNewItem({ ...newItem, description: e.target.value })} />
+                <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm md:col-span-2" placeholder="Image URL" value={newItem.image} onChange={(e) => setNewItem({ ...newItem, image: e.target.value })} />
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" checked={newItem.active} onChange={(e) => setNewItem({ ...newItem, active: e.target.checked })} />
+                  <span className="text-sm">Active</span>
+                </label>
+                <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-light md:col-span-2">
+                  <span className="material-symbols-outlined text-[18px]">save</span>
+                  Save Item
+                </button>
+              </form>
 
               <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                 <label className="relative md:col-span-2">
@@ -427,6 +536,68 @@ export default function AdminPortal() {
               <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600">
                 Active: <span className="font-bold text-primary">{activeCount}</span> · Inactive:{" "}
                 <span className="font-bold text-slate-800">{inactiveCount}</span>
+              </div>
+            </section>
+          ) : (
+            <section className="space-y-6">
+              <header className="space-y-1">
+                <h2 className="text-3xl font-extrabold tracking-tight text-primary-dark">Admin Users</h2>
+                <p className="text-slate-500">Add admin accounts by email.</p>
+              </header>
+              <form
+                className="grid grid-cols-1 gap-3 md:grid-cols-3 items-end rounded-2xl border border-slate-200 bg-white p-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  fetch("/api/admin/users", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                    body: JSON.stringify({ email: adminEmail }),
+                  })
+                    .then(async (r) => {
+                      const data = await r.json();
+                      if (!r.ok) return;
+                      setAdminUsers((current) => [data, ...current]);
+                      setAdminEmail("");
+                    })
+                    .catch(() => {});
+                }}
+              >
+                <input
+                  className="h-11 rounded-xl border border-slate-200 px-3 text-sm md:col-span-2"
+                  placeholder="Admin email"
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  required
+                />
+                <button
+                  type="submit"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-light"
+                >
+                  <span className="material-symbols-outlined text-[18px]">person_add</span>
+                  Add Admin
+                </button>
+              </form>
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+                  <h3 className="text-lg font-bold text-slate-900">Current Admins</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[500px] border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 bg-slate-50">
+                        <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {adminUsers.map((u) => (
+                        <tr key={u.id} className="border-b border-slate-100 last:border-b-0">
+                          <td className="px-6 py-4 text-sm font-medium text-slate-800">{u.email}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </section>
           )}
