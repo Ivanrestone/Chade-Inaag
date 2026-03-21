@@ -5,7 +5,9 @@
     "category": "Chicken",
     "description": "Signature grilled chicken leg quarter with unlimited rice.",
     "price": 107,
-    "active": false,
+    "active": true,
+    "unliRice": true,
+    "bestSeller": false,
     "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAjGO8S2Ah2D3OOfKJNRya7FFJLZvePuShMjk7DYYtGzHAyfBmemT3rIoq1iddox66iRU3rrjNYpSHJXTE_UcEEIfanBSiWDrHWcF4StZdJ8xCsNDgbhZlyhoT-Dkgz9xAHNiZkOzCOYOGQ3T2O44ZDbgOiNMK-gU5mzW1-DrMnnqrhdkLObFyC-AHygaVxdKDG_WKdQxCHnMf2d_arBzkRfpyOtiB6KP2W1KH5-nrqKZ1YIPxv1z2qBouXmVKwkBJ4HM-5mJZ5K-w"
   },
   {
@@ -15,6 +17,8 @@
     "description": "Crunchy pork bits with onions, chili, and calamansi.",
     "price": 99,
     "active": true,
+    "unliRice": true,
+    "bestSeller": true,
     "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ26EsuyKu_vglDzGWxPAdVthroqZBvHZLUP25eLXN0Qp4Ssjcbvv5OYj9lZ5pRSg1TJH-rIKtYVJ0Qct8NAWQvmWsZ2jod_yl_vR7f12pjX5Fobh7IpRfBJH5Nbe9wu3qhycUQ5pLovikfI0k91REEITQ_fbuNK5jpyjpxj2bWCFfQChtLaxeyVTfXS1ajXQrRJEpvV0jHHWE3I3gAdx3_du1I8CM3NMO8LAd3LSd7bXCxhn8Hd79ojmvRqdaM_hQLJQEyiSegI"
   },
   {
@@ -24,6 +28,8 @@
     "description": "Classic pork barbecue skewers, sweet and savory.",
     "price": 99,
     "active": true,
+    "unliRice": false,
+    "bestSeller": true,
     "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDmfZ08ILCzI6aF8yAf-p1sG2orGAWfpRyYgtixNbw__FEZ-B1dYyXFJL1JKEiNyHQotd8k9I1BQ69tR154g0TzXNv-ZmAeWp1Cdvb_jcB9Kk3F2bsKymaFHQeQF8fw5EOurBEQwe6thVmdxUiyhqV0R4esO-HL0YykH9WEcyIgoUO0iC-fYupi28vNyZ176dpA6Eqteion3Aa0UidTxD28Q9ZIiSpr3o2zYLcQSkGbrTyTS9b3M5AypgseWR46aYJ1FF6r9D1t-8w"
   },
   {
@@ -32,7 +38,9 @@
     "category": "Dessert",
     "description": "Creamy shaved ice dessert with leche flan and ube ice cream.",
     "price": 35,
-    "active": false,
+    "active": true,
+    "unliRice": true,
+    "bestSeller": false,
     "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ"
   },
   {
@@ -42,6 +50,8 @@
     "description": "Succulent grilled tuna jaw marinated in secret sauce.",
     "price": 160,
     "active": true,
+    "unliRice": false,
+    "bestSeller": true,
     "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ"
   },
   {
@@ -51,6 +61,8 @@
     "description": "Tender ribs glazed in sweet and savory barbecue sauce.",
     "price": 159,
     "active": true,
+    "unliRice": false,
+    "bestSeller": true,
     "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuChniK0iPmFqUryVN7FVyFfsDNdlsemFTLWsOaIk-RWzv4RpAYzBG5Won_3tQeFQ4epXRPyQWQx0KvltbNa4Wig5XLa_L7JESHYr9UwyLQ5XFBdSD7iSlaYyoGzD1gZPcjzpwFTVHv6_eymhbZbmdQmP3tBqVzn_fNlYNHfoU85XHzKogzq3yEafE3d1swy-imhIRBcUgDIi1iBj-xfxPok3Tmen_GkIZlt-3RCquYbYqyF2IeAsdZhvWH84_NS9ypgPgKaxlmg1Ag"
   },
   {
@@ -59,8 +71,10 @@
     "description": "wew",
     "price": 111,
     "active": true,
-    "image": "https://imgs.search.brave.com/zm1uSeuDGR6sAIbyxLMVJbtIr2OQShBJ65Ngtoy2XkA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNzAv/MjU1LzYxMC9zbWFs/bC90YXN0eS1ncmls/bGVkLWNoaWNrZW4t/YnJlYXN0LW9uLXdo/aXRlLXBob3RvLmpw/Zw",
-    "id": 7
+    "unliRice": true,
+    "bestSeller": false,
+    "id": 7,
+    "image": "https://imgs.search.brave.com/zm1uSeuDGR6sAIbyxLMVJbtIr2OQShBJ65Ngtoy2XkA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNzAv/MjU1LzYxMC9zbWFs/bC90YXN0eS1ncmls/bGVkLWNoaWNrZW4t/YnJlYXN0LW9uLXdo/aXRlLXBob3RvLmpw/Zw"
   },
   {
     "name": "name ",
@@ -68,7 +82,9 @@
     "description": "description",
     "price": 0,
     "active": true,
-    "image": "https://imgs.search.brave.com/Ixk1BV8u73ePpHVAICUQ8sUIU__W0P5cEGMP42CU7lQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi84Lzg0L01h/bGVfYW5kX2ZlbWFs/ZV9jaGlja2VuX3Np/dHRpbmdfdG9nZXRo/ZXIuanBnLzUxMnB4/LU1hbGVfYW5kX2Zl/bWFsZV9jaGlja2Vu/X3NpdHRpbmdfdG9n/ZXRoZXIuanBn",
-    "id": 8
+    "unliRice": true,
+    "bestSeller": false,
+    "id": 8,
+    "image": "https://imgs.search.brave.com/Ixk1BV8u73ePpHVAICUQ8sUIU__W0P5cEGMP42CU7lQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi84Lzg0L01h/bGVfYW5kX2ZlbWFs/ZV9jaGlja2VuX3Np/dHRpbmdfdG9nZXRo/ZXIuanBnLzUxMnB4/LU1hbGVfYW5kX2Zl/bWFsZV9jaGlja2Vu/X3NpdHRpbmdfdG9n/ZXRoZXIuanBn"
   }
 ]

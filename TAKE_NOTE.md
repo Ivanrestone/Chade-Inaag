@@ -21,12 +21,16 @@
 ## Frontend
 - Admin portal: frontend/src/components/AdminPortal.tsx
   - Loads menu from /api/menu on mount
-  - Add new item via a form (name, category, price, description, image, active)
-  - Update price and active state using PATCH /api/menu/:id
+  - Add new item via a form (name, category, price, description, image, active, unliRice, bestSeller)
+  - Update price, active, unliRice, and bestSeller state using PATCH /api/menu/:id
   - Admin Users page in sidebar: list current admins and add by email
 - Landing page: frontend/src/App.tsx
-  - Fetches /api/menu and renders first 3 active items in “Our Best Sellers”
+  - Fetches /api/menu and renders active items marked as “Best Seller” (defaults to first 3 active items if none are marked)
   - Clicking “View Full Menu” switches the grid to show all active items
+  - Displays “UNLI RICE” badge only for items with unliRice flag set to true
+- Category Guidance:
+  - Recommended categories: “Chicken”, “Pork”, “Beef”, “Fish”, “Seafood”, “BBQ”, “Dessert”, “Drinks”
+  - Use consistent naming (e.g., “Chicken” instead of “chicken”) for better filtering in the UI
 - Dev proxy: frontend/vite.config.ts
   - '/api' → http://localhost:4005 (current backend port)
 

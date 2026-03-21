@@ -13,7 +13,7 @@ export async function getMenu(req, res) {
 
 export async function addMenuItem(req, res) {
   const body = req.body || {};
-  const required = ["name", "category", "description", "price", "active", "image"];
+  const required = ["name", "category", "description", "price", "active", "image", "unliRice", "bestSeller"];
   const missing = required.filter((k) => !(k in body));
   if (missing.length) {
     return res.status(400).json({ error: "Missing fields", fields: missing });
@@ -24,6 +24,8 @@ export async function addMenuItem(req, res) {
     description: String(body.description),
     price: Number(body.price),
     active: Boolean(body.active),
+    unliRice: Boolean(body.unliRice),
+    bestSeller: Boolean(body.bestSeller),
     image: String(body.image),
   });
   res.status(201).json(item);

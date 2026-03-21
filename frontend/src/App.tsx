@@ -14,6 +14,8 @@ function App() {
     description: string;
     price: number;
     active: boolean;
+    unliRice: boolean;
+    bestSeller: boolean;
     image: string;
   };
   const [menu, setMenu] = useState<MenuItem[]>([]);
@@ -131,27 +133,50 @@ function App() {
 
         <section id="best-sellers" className="px-6 py-16">
           <div className="max-w-[1200px] mx-auto text-center mb-10">
-            <span className="inline-block py-1 px-3 rounded-full bg-accent-yellow/20 text-accent-yellow text-xs font-bold tracking-wider uppercase border border-accent-yellow/30">Authentic Filipino Grill</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">Our Best Sellers</h2>
-            <p className="text-slate-600 dark:text-slate-400 text-lg mt-2">Experience the taste of tradition with our crowd-favorite grilled specialties.</p>
+            <span className="inline-block py-1 px-3 rounded-full bg-accent-yellow/20 text-accent-yellow text-xs font-bold tracking-wider uppercase border border-accent-yellow/30">
+              {showFullMenu ? "Complete Menu" : "Authentic Filipino Grill"}
+            </span>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              {showFullMenu ? "Explore Our Full Menu" : "Our Best Sellers"}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-lg mt-2">
+              {showFullMenu
+                ? "Browse through our complete selection of charcoal-grilled specialties and favorites."
+                : "Experience the taste of tradition with our crowd-favorite grilled specialties."}
+            </p>
           </div>
           <div className="max-w-[1200px] mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {(showFullMenu ? menu.filter((i) => i.active) : menu.filter((i) => i.active).slice(0, 3)).map((i) => (
+              {(showFullMenu
+                ? menu.filter((i) => i.active)
+                : menu.filter((i) => i.active && i.bestSeller).length > 0
+                ? menu.filter((i) => i.active && i.bestSeller)
+                : menu.filter((i) => i.active).slice(0, 3)
+              ).map((i) => (
                 <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
-                  <div className="absolute top-4 right-4 z-10">
-                    <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
-                      <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
-                      UNLI RICE
-                    </span>
-                  </div>
+                  {i.unliRice && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
+                        <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
+                        UNLI RICE
+                      </span>
+                    </div>
+                  )}
                   <div className="relative h-64 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-                    <img src={i.image} alt={i.name} />
+                    <img src={i.image} alt={i.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   </div>
                   <div className="p-6 flex flex-col flex-grow">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{i.name}</h3>
+                      <div className="flex flex-col">
+                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{i.name}</h3>
+                        {!showFullMenu && i.bestSeller && (
+                          <span className="text-[10px] font-black uppercase tracking-widest text-accent-yellow flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[12px]">star</span>
+                            Top Pick
+                          </span>
+                        )}
+                      </div>
                       <span className="text-xl font-bold text-primary">₱{i.price}</span>
                     </div>
                     <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">{i.description}</p>
@@ -172,9 +197,18 @@ function App() {
               ))}
             </div>
             <div className="mt-12 text-center">
-              <a href="#best-sellers" onClick={() => setShowFullMenu(true)} className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
-                View Full Menu
-                <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+              <a
+                href="#best-sellers"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowFullMenu(!showFullMenu);
+                }}
+                className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all"
+              >
+                {showFullMenu ? "Show Best Sellers" : "View Full Menu"}
+                <span className={`material-symbols-outlined text-[20px] transition-transform ${showFullMenu ? "rotate-180" : ""}`}>
+                  {showFullMenu ? "arrow_back" : "arrow_forward"}
+                </span>
               </a>
             </div>
           </div>
@@ -245,8 +279,18 @@ function App() {
               <h3 className="text-3xl font-bold text-white mb-4">Ready to satisfy your cravings?</h3>
               <p className="text-green-100 mb-8 text-lg">We don&apos;t accept reservations, but we always find room for family. Drop by today!</p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#best-sellers" onClick={() => setShowFullMenu(true)} className="bg-white text-primary font-bold py-3 px-8 rounded-xl hover:bg-gray-100 transition shadow-lg">View Full Menu</a>
-                <a href="#contact" className="bg-green-700 dark:bg-green-800 text-white font-bold py-3 px-8 rounded-xl hover:bg-green-600 transition shadow-lg border border-green-600">Contact Us</a>
+                <a
+                  href="#best-sellers"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowFullMenu(true);
+                    document.getElementById("best-sellers")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="bg-white text-primary font-bold py-3 px-8 rounded-xl hover:bg-gray-100 transition shadow-lg text-center"
+                >
+                  View Full Menu
+                </a>
+                <a href="#contact" className="bg-green-700 dark:bg-green-800 text-white font-bold py-3 px-8 rounded-xl hover:bg-green-600 transition shadow-lg border border-green-600 text-center">Contact Us</a>
               </div>
             </div>
           </div>

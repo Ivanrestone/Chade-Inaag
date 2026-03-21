@@ -10,6 +10,8 @@ type MenuItem = {
   description: string;
   price: number;
   active: boolean;
+  unliRice: boolean;
+  bestSeller: boolean;
   image: string;
 };
 
@@ -25,6 +27,8 @@ const initialMenuItems: MenuItem[] = [
     description: "Signature grilled chicken leg quarter with unlimited rice.",
     price: 99,
     active: true,
+    unliRice: true,
+    bestSeller: true,
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuAjGO8S2Ah2D3OOfKJNRya7FFJLZvePuShMjk7DYYtGzHAyfBmemT3rIoq1iddox66iRU3rrjNYpSHJXTE_UcEEIfanBSiWDrHWcF4StZdJ8xCsNDgbhZlyhoT-Dkgz9xAHNiZkOzCOYOGQ3T2O44ZDbgOiNMK-gU5mzW1-DrMnnqrhdkLObFyC-AHygaVxdKDG_WKdQxCHnMf2d_arBzkRfpyOtiB6KP2W1KH5-nrqKZ1YIPxv1z2qBouXmVKwkBJ4HM-5mJZ5K-w",
   },
@@ -35,6 +39,8 @@ const initialMenuItems: MenuItem[] = [
     description: "Crunchy pork bits with onions, chili, and calamansi.",
     price: 99,
     active: true,
+    unliRice: false,
+    bestSeller: true,
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ26EsuyKu_vglDzGWxPAdVthroqZBvHZLUP25eLXN0Qp4Ssjcbvv5OYj9lZ5pRSg1TJH-rIKtYVJ0Qct8NAWQvmWsZ2jod_yl_vR7f12pjX5Fobh7IpRfBJH5Nbe9wu3qhycUQ5pLovikfI0k91REEITQ_fbuNK5jpyjpxj2bWCFfQChtLaxeyVTfXS1ajXQrRJEpvV0jHHWE3I3gAdx3_du1I8CM3NMO8LAd3LSd7bXCxhn8Hd79ojmvRqdaM_hQLJQEyiSegI",
   },
@@ -45,6 +51,8 @@ const initialMenuItems: MenuItem[] = [
     description: "Classic pork barbecue skewers, sweet and savory.",
     price: 99,
     active: true,
+    unliRice: false,
+    bestSeller: true,
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDmfZ08ILCzI6aF8yAf-p1sG2orGAWfpRyYgtixNbw__FEZ-B1dYyXFJL1JKEiNyHQotd8k9I1BQ69tR154g0TzXNv-ZmAeWp1Cdvb_jcB9Kk3F2bsKymaFHQeQF8fw5EOurBEQwe6thVmdxUiyhqV0R4esO-HL0YykH9WEcyIgoUO0iC-fYupi28vNyZ176dpA6Eqteion3Aa0UidTxD28Q9ZIiSpr3o2zYLcQSkGbrTyTS9b3M5AypgseWR46aYJ1FF6r9D1t-8w",
   },
@@ -55,6 +63,8 @@ const initialMenuItems: MenuItem[] = [
     description: "Creamy shaved ice dessert with leche flan and ube ice cream.",
     price: 35,
     active: false,
+    unliRice: false,
+    bestSeller: false,
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ",
   },
@@ -65,6 +75,8 @@ const initialMenuItems: MenuItem[] = [
     description: "Succulent grilled tuna jaw marinated in secret sauce.",
     price: 160,
     active: true,
+    unliRice: false,
+    bestSeller: false,
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ",
   },
@@ -75,6 +87,8 @@ const initialMenuItems: MenuItem[] = [
     description: "Tender ribs glazed in sweet and savory barbecue sauce.",
     price: 159,
     active: true,
+    unliRice: false,
+    bestSeller: false,
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuChniK0iPmFqUryVN7FVyFfsDNdlsemFTLWsOaIk-RWzv4RpAYzBG5Won_3tQeFQ4epXRPyQWQx0KvltbNa4Wig5XLa_L7JESHYr9UwyLQ5XFBdSD7iSlaYyoGzD1gZPcjzpwFTVHv6_eymhbZbmdQmP3tBqVzn_fNlYNHfoU85XHzKogzq3yEafE3d1swy-imhIRBcUgDIi1iBj-xfxPok3Tmen_GkIZlt-3RCquYbYqyF2IeAsdZhvWH84_NS9ypgPgKaxlmg1Ag",
   },
@@ -108,6 +122,8 @@ export default function AdminPortal() {
     description: "",
     price: 0,
     active: true,
+    unliRice: false,
+    bestSeller: false,
     image: "",
   });
 
@@ -135,7 +151,7 @@ export default function AdminPortal() {
         })
         .catch(() => {});
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, token]);
 
   const filteredMenuItems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -221,6 +237,34 @@ export default function AdminPortal() {
       });
   };
 
+  const toggleUnliRice = (id: number) => {
+    const item = menuItems.find((x) => x.id === id);
+    if (!item) return;
+    fetch(`/api/menu/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ unliRice: !item.unliRice }),
+    })
+      .then((r) => r.json())
+      .then((updated: MenuItem) => {
+        setMenuItems((current) => current.map((x) => (x.id === id ? updated : x)));
+      });
+  };
+
+  const toggleBestSeller = (id: number) => {
+    const item = menuItems.find((x) => x.id === id);
+    if (!item) return;
+    fetch(`/api/menu/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ bestSeller: !item.bestSeller }),
+    })
+      .then((r) => r.json())
+      .then((updated: MenuItem) => {
+        setMenuItems((current) => current.map((x) => (x.id === id ? updated : x)));
+      });
+  };
+
   const addItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch("/api/menu", {
@@ -237,6 +281,8 @@ export default function AdminPortal() {
           description: "",
           price: 0,
           active: true,
+          unliRice: false,
+          bestSeller: false,
           image: "",
         });
       });
@@ -457,10 +503,20 @@ export default function AdminPortal() {
                 <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm" placeholder="Price" type="number" value={newItem.price} onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })} />
                 <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm md:col-span-2" placeholder="Description" value={newItem.description} onChange={(e) => setNewItem({ ...newItem, description: e.target.value })} />
                 <input className="h-11 rounded-xl border border-slate-200 px-3 text-sm md:col-span-2" placeholder="Image URL" value={newItem.image} onChange={(e) => setNewItem({ ...newItem, image: e.target.value })} />
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" checked={newItem.active} onChange={(e) => setNewItem({ ...newItem, active: e.target.checked })} />
-                  <span className="text-sm">Active</span>
-                </label>
+                <div className="flex flex-wrap gap-4 md:col-span-2">
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" checked={newItem.active} onChange={(e) => setNewItem({ ...newItem, active: e.target.checked })} />
+                    <span className="text-sm">Active</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" checked={newItem.unliRice} onChange={(e) => setNewItem({ ...newItem, unliRice: e.target.checked })} />
+                    <span className="text-sm">Unli Rice</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" checked={newItem.bestSeller} onChange={(e) => setNewItem({ ...newItem, bestSeller: e.target.checked })} />
+                    <span className="text-sm">Best Seller</span>
+                  </label>
+                </div>
                 <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-light md:col-span-2">
                   <span className="material-symbols-outlined text-[18px]">save</span>
                   Save Item
@@ -493,12 +549,44 @@ export default function AdminPortal() {
                   <article key={item.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                     <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
                       <img src={item.image} alt={item.name} className="h-full w-full object-cover transition duration-500 hover:scale-105" />
-                      <span className="absolute bottom-3 left-3 rounded-lg bg-black/65 px-2 py-1 text-xs font-bold text-white">{item.category}</span>
+                      <div className="absolute bottom-3 left-3 flex flex-wrap gap-2">
+                        <span className="rounded-lg bg-black/65 px-2 py-1 text-xs font-bold text-white">{item.category}</span>
+                        {item.unliRice && (
+                          <span className="rounded-lg bg-primary/90 px-2 py-1 text-xs font-bold text-white flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]">potted_plant</span>
+                            Unli Rice
+                          </span>
+                        )}
+                        {item.bestSeller && (
+                          <span className="rounded-lg bg-amber-500/90 px-2 py-1 text-xs font-bold text-white flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]">star</span>
+                            Best Seller
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div className="space-y-4 p-4">
                       <div>
                         <h3 className="text-lg font-bold text-slate-900">{item.name}</h3>
                         <p className="mt-1 text-sm text-slate-500">{item.description}</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          className={`inline-flex h-8 items-center rounded-full px-3 text-[10px] font-bold uppercase tracking-wide transition ${
+                            item.unliRice ? "bg-primary/10 text-primary border border-primary/20" : "bg-slate-100 text-slate-500 border border-transparent"
+                          }`}
+                          onClick={() => toggleUnliRice(item.id)}
+                        >
+                          Unli Rice
+                        </button>
+                        <button
+                          className={`inline-flex h-8 items-center rounded-full px-3 text-[10px] font-bold uppercase tracking-wide transition ${
+                            item.bestSeller ? "bg-amber-100 text-amber-700 border border-amber-200" : "bg-slate-100 text-slate-500 border border-transparent"
+                          }`}
+                          onClick={() => toggleBestSeller(item.id)}
+                        >
+                          Best Seller
+                        </button>
                       </div>
                       <div className="flex items-center justify-between border-t border-slate-100 pt-4">
                         <label className="flex items-center gap-2">
