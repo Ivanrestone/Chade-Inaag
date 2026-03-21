@@ -26,6 +26,7 @@
   - Admin Users page in sidebar: list current admins and add by email
 - Landing page: frontend/src/App.tsx
   - Fetches /api/menu and renders first 3 active items in “Our Best Sellers”
+  - Clicking “View Full Menu” switches the grid to show all active items
 - Dev proxy: frontend/vite.config.ts
   - '/api' → http://localhost:4005 (current backend port)
 

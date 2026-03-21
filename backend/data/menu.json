@@ -61,5 +61,14 @@
     "active": true,
     "image": "https://imgs.search.brave.com/zm1uSeuDGR6sAIbyxLMVJbtIr2OQShBJ65Ngtoy2XkA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNzAv/MjU1LzYxMC9zbWFs/bC90YXN0eS1ncmls/bGVkLWNoaWNrZW4t/YnJlYXN0LW9uLXdo/aXRlLXBob3RvLmpw/Zw",
     "id": 7
+  },
+  {
+    "name": "name ",
+    "category": "category",
+    "description": "description",
+    "price": 0,
+    "active": true,
+    "image": "https://imgs.search.brave.com/Ixk1BV8u73ePpHVAICUQ8sUIU__W0P5cEGMP42CU7lQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi84Lzg0L01h/bGVfYW5kX2ZlbWFs/ZV9jaGlja2VuX3Np/dHRpbmdfdG9nZXRo/ZXIuanBnLzUxMnB4/LU1hbGVfYW5kX2Zl/bWFsZV9jaGlja2Vu/X3NpdHRpbmdfdG9n/ZXRoZXIuanBn",
+    "id": 8
   }
 ]

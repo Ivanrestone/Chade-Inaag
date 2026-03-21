@@ -17,6 +17,7 @@ function App() {
     image: string;
   };
   const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [showFullMenu, setShowFullMenu] = useState(false);
 
   useEffect(() => {
     fetch("/api/menu")
@@ -136,7 +137,7 @@ function App() {
           </div>
           <div className="max-w-[1200px] mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {menu.filter((i) => i.active).slice(0, 3).map((i) => (
+              {(showFullMenu ? menu.filter((i) => i.active) : menu.filter((i) => i.active).slice(0, 3)).map((i) => (
                 <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
                   <div className="absolute top-4 right-4 z-10">
                     <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-glow">
@@ -171,7 +172,7 @@ function App() {
               ))}
             </div>
             <div className="mt-12 text-center">
-              <a href="#best-sellers" className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+              <a href="#best-sellers" onClick={() => setShowFullMenu(true)} className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
                 View Full Menu
                 <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
               </a>
@@ -244,7 +245,7 @@ function App() {
               <h3 className="text-3xl font-bold text-white mb-4">Ready to satisfy your cravings?</h3>
               <p className="text-green-100 mb-8 text-lg">We don&apos;t accept reservations, but we always find room for family. Drop by today!</p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#best-sellers" className="bg-white text-primary font-bold py-3 px-8 rounded-xl hover:bg-gray-100 transition shadow-lg">View Full Menu</a>
+                <a href="#best-sellers" onClick={() => setShowFullMenu(true)} className="bg-white text-primary font-bold py-3 px-8 rounded-xl hover:bg-gray-100 transition shadow-lg">View Full Menu</a>
                 <a href="#contact" className="bg-green-700 dark:bg-green-800 text-white font-bold py-3 px-8 rounded-xl hover:bg-green-600 transition shadow-lg border border-green-600">Contact Us</a>
               </div>
             </div>
