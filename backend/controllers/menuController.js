@@ -1,14 +1,17 @@
-import {
-  loadMenu,
-  saveMenu,
-  addItem,
-  updateItem,
-  deleteItem,
-} from "../models/menuModel.js";
+import { Menu } from "../models/Menu.js";
 
 export async function getMenu(req, res) {
-  const items = await loadMenu();
-  res.json(items);
+  try {
+    const items = await Menu.find().sort({ createdAt: -1 });
+    // Map _id to id for frontend compatibility
+    const formatted = items.map(item => ({
+      ...item.toObject(),
+      id: item._id
+    }));
+    res.json(formatted);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch menu" });
+  }
 }
 
 export async function addMenuItem(req, res) {
@@ -18,34 +21,49 @@ export async function addMenuItem(req, res) {
   if (missing.length) {
     return res.status(400).json({ error: "Missing fields", fields: missing });
   }
-  const item = await addItem({
-    name: String(body.name),
-    category: String(body.category),
-    description: String(body.description),
-    price: Number(body.price),
-    active: Boolean(body.active),
-    unliRice: Boolean(body.unliRice),
-    bestSeller: Boolean(body.bestSeller),
-    image: String(body.image),
-  });
-  res.status(201).json(item);
+
+  try {
+    const newItem = new Menu({
+      name: String(body.name),
+      category: String(body.category),
+      description: String(body.description),
+      price: Number(body.price),
+      active: Boolean(body.active),
+      unliRice: Boolean(body.unliRice),
+      bestSeller: Boolean(body.bestSeller),
+      image: String(body.image),
+    });
+    const saved = await newItem.save();
+    res.status(201).json({ ...saved.toObject(), id: saved._id });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to add menu item" });
+  }
 }
 
 export async function updateMenuItem(req, res) {
-  const id = Number(req.params.id);
+  const id = req.params.id;
   const updates = req.body || {};
-  const updated = await updateItem(id, updates);
-  if (!updated) {
-    return res.status(404).json({ error: "Item not found" });
+  
+  try {
+    const updated = await Menu.findByIdAndUpdate(id, updates, { new: true });
+    if (!updated) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    res.json({ ...updated.toObject(), id: updated._id });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update menu item" });
   }
-  res.json(updated);
 }
 
 export async function deleteMenuItem(req, res) {
-  const id = Number(req.params.id);
-  const ok = await deleteItem(id);
-  if (!ok) {
-    return res.status(404).json({ error: "Item not found" });
+  const id = req.params.id;
+  try {
+    const deleted = await Menu.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete menu item" });
   }
-  res.status(204).send();
 }
