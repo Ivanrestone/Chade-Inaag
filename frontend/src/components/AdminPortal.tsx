@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import type { FormEvent } from "react";
 
-type DashboardPage = "overview" | "menu" | "users";
+type DashboardPage = "overview" | "menu" | "users" | "branches";
 
 type MenuItem = {
   id: string;
@@ -20,6 +20,37 @@ const demoPassword = "admin123";
 const authStorageKey = "change_inaag_admin_auth";
 
 const categories = ["Chicken", "Pork", "Beef", "Fish", "Seafood", "BBQ", "Dessert", "Drinks", "Other"];
+
+const branchFeatures = ["Free WiFi", "Parking Available", "Air Conditioned", "Unli Rice", "Outdoor Seating", "Delivery", "Function Room"];
+
+type DayHours = {
+  open: boolean;
+  openTime: string;
+  closeTime: string;
+};
+
+type BranchHours = {
+  monday: DayHours;
+  tuesday: DayHours;
+  wednesday: DayHours;
+  thursday: DayHours;
+  friday: DayHours;
+  saturday: DayHours;
+  sunday: DayHours;
+};
+
+type BranchItem = {
+  id: string;
+  name: string;
+  status: "open" | "coming-soon";
+  image: string;
+  address: string;
+  hours: BranchHours;
+  phone: string;
+  email: string;
+  features: string[];
+  mapUrl: string;
+};
 
 const initialMenuItems: MenuItem[] = [
   {
@@ -130,6 +161,29 @@ export default function AdminPortal() {
     bestSeller: false,
     image: "",
   });
+  const [branches, setBranches] = useState<BranchItem[]>([]);
+  const defaultHours: BranchHours = {
+    monday: { open: true, openTime: "10:00", closeTime: "21:00" },
+    tuesday: { open: true, openTime: "10:00", closeTime: "21:00" },
+    wednesday: { open: true, openTime: "10:00", closeTime: "21:00" },
+    thursday: { open: true, openTime: "10:00", closeTime: "21:00" },
+    friday: { open: true, openTime: "10:00", closeTime: "21:00" },
+    saturday: { open: true, openTime: "10:00", closeTime: "21:00" },
+    sunday: { open: true, openTime: "10:00", closeTime: "21:00" },
+  };
+
+  const [newBranch, setNewBranch] = useState<Omit<BranchItem, "id">>({
+    name: "",
+    status: "open",
+    image: "",
+    address: "",
+    hours: defaultHours,
+    phone: "",
+    email: "",
+    features: [],
+    mapUrl: "",
+  });
+  const [editingBranchId, setEditingBranchId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/menu")
@@ -156,6 +210,83 @@ export default function AdminPortal() {
         .catch(() => {});
     }
   }, [isAuthenticated, token]);
+
+  useEffect(() => {
+    fetch("/api/branches")
+      .then((r) => r.json())
+      .then((items) => {
+        if (Array.isArray(items)) setBranches(items);
+      })
+      .catch(() => {});
+  }, []);
+
+  const toggleBranchFeature = (feature: string) => {
+    setNewBranch((prev) => ({
+      ...prev,
+      features: prev.features.includes(feature)
+        ? prev.features.filter((f) => f !== feature)
+        : [...prev.features, feature],
+    }));
+  };
+
+  const addBranch = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/branches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(newBranch),
+      });
+      const data = await res.json();
+      console.log("Branch created:", data);
+      if (!res.ok) throw new Error(data.error || "Failed to add branch");
+      setBranches((current) => [...current, data]);
+      setNewBranch({ name: "", status: "open", image: "", address: "", hours: defaultHours, phone: "", email: "", features: [], mapUrl: "" });
+      setSuccessMsg("Branch added successfully!");
+      setTimeout(() => setSuccessMsg(""), 3000);
+    } catch (err: any) {
+      setError(err.message || "Failed to add branch");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const updateBranchStatus = (id: string, status: "open" | "coming-soon") => {
+    fetch(`/api/branches/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ status }),
+    })
+      .then((r) => r.json())
+      .then((updated) => {
+        setBranches((current) => current.map((b) => (b.id === id ? updated : b)));
+      });
+  };
+
+  const deleteBranchItem = (id: string) => {
+    if (!confirm("Delete this branch?")) return;
+    fetch(`/api/branches/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then(() => {
+        setBranches((current) => current.filter((b) => b.id !== id));
+      });
+  };
+
+  const handleBranchImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewBranch({ ...newBranch, image: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const filteredMenuItems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -443,6 +574,15 @@ export default function AdminPortal() {
             >
               <span className="material-symbols-outlined text-[20px]">group</span>
               Admin Users
+            </button>
+            <button
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${
+                activePage === "branches" ? "bg-white/15 text-white" : "text-green-100 hover:bg-white/10 hover:text-white"
+              }`}
+              onClick={() => setActivePage("branches")}
+            >
+              <span className="material-symbols-outlined text-[20px]">store</span>
+              Branches
             </button>
           </nav>
 
@@ -754,6 +894,294 @@ export default function AdminPortal() {
               <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600">
                 Active: <span className="font-bold text-primary">{activeCount}</span> · Inactive:{" "}
                 <span className="font-bold text-slate-800">{inactiveCount}</span>
+              </div>
+            </section>
+          ) : activePage === "branches" ? (
+            <section className="space-y-6">
+              <header className="space-y-1">
+                <h2 className="text-3xl font-extrabold tracking-tight text-primary-dark">Branch Management</h2>
+                <p className="text-slate-500">Add, edit, and manage your restaurant branches and locations.</p>
+              </header>
+
+              {/* Add Branch Form */}
+              <form className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4" onSubmit={addBranch}>
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">add_business</span>
+                  Add New Branch
+                </h3>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Branch Name</label>
+                    <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="e.g. Valencia City - Main Branch" value={newBranch.name} onChange={(e) => setNewBranch({ ...newBranch, name: e.target.value })} required />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Status</label>
+                    <select className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" value={newBranch.status} onChange={(e) => setNewBranch({ ...newBranch, status: e.target.value as "open" | "coming-soon" })}>
+                      <option value="open">Open</option>
+                      <option value="coming-soon">Coming Soon</option>
+                    </select>
+                  </div>
+                  <div className="md:col-span-2 space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Address</label>
+                    <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Full address" value={newBranch.address} onChange={(e) => setNewBranch({ ...newBranch, address: e.target.value })} required />
+                  </div>
+                  <div className="md:col-span-2 space-y-3">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Operating Hours</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const).map((day) => (
+                        <div key={day} className="flex items-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50/50">
+                          <input
+                            type="checkbox"
+                            id={`day-${day}`}
+                            checked={newBranch.hours[day].open}
+                            onChange={(e) => setNewBranch({
+                              ...newBranch,
+                              hours: {
+                                ...newBranch.hours,
+                                [day]: { ...newBranch.hours[day], open: e.target.checked }
+                              }
+                            })}
+                            className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <label htmlFor={`day-${day}`} className="text-sm font-semibold text-slate-700 capitalize block">{day}</label>
+                            {newBranch.hours[day].open ? (
+                              <div className="flex items-center gap-1 mt-1">
+                                <input
+                                  type="time"
+                                  value={newBranch.hours[day].openTime}
+                                  onChange={(e) => setNewBranch({
+                                    ...newBranch,
+                                    hours: {
+                                      ...newBranch.hours,
+                                      [day]: { ...newBranch.hours[day], openTime: e.target.value }
+                                    }
+                                  })}
+                                  className="w-20 h-7 text-xs rounded border border-slate-200 px-1"
+                                />
+                                <span className="text-xs text-slate-400">to</span>
+                                <input
+                                  type="time"
+                                  value={newBranch.hours[day].closeTime}
+                                  onChange={(e) => setNewBranch({
+                                    ...newBranch,
+                                    hours: {
+                                      ...newBranch.hours,
+                                      [day]: { ...newBranch.hours[day], closeTime: e.target.value }
+                                    }
+                                  })}
+                                  className="w-20 h-7 text-xs rounded border border-slate-200 px-1"
+                                />
+                              </div>
+                            ) : (
+                              <span className="text-xs text-slate-400 italic">Closed</span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Phone</label>
+                    <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="+63 912 345 6789" value={newBranch.phone} onChange={(e) => setNewBranch({ ...newBranch, phone: e.target.value })} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Email</label>
+                    <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="branch@chadenanag.com" value={newBranch.email} onChange={(e) => setNewBranch({ ...newBranch, email: e.target.value })} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Google Maps URL</label>
+                    <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="https://goo.gl/maps/..." value={newBranch.mapUrl} onChange={(e) => setNewBranch({ ...newBranch, mapUrl: e.target.value })} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Branch Photo</label>
+                    <div className="relative">
+                      <input type="file" accept="image/*" onChange={handleBranchImageChange} className="hidden" id="branchImageUpload" />
+                      <label htmlFor="branchImageUpload" className="h-11 w-full flex items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 px-4 text-sm text-slate-500 cursor-pointer hover:border-primary hover:bg-primary/5 hover:text-primary transition-all overflow-hidden">
+                        <span className="material-symbols-outlined text-[20px]">add_photo_alternate</span>
+                        {newBranch.image ? <span className="truncate text-primary-dark font-medium italic">Image Selected</span> : <span>Choose photo...</span>}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Branch Features</label>
+                  <div className="flex flex-wrap gap-2">
+                    {branchFeatures.map((feature) => (
+                      <button
+                        key={feature}
+                        type="button"
+                        onClick={() => toggleBranchFeature(feature)}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                          newBranch.features.includes(feature)
+                            ? "bg-primary text-white border-transparent shadow-md shadow-primary/20"
+                            : "bg-slate-50 text-slate-400 border-slate-200 opacity-60 hover:opacity-100"
+                        }`}
+                      >
+                        <span className="material-symbols-outlined text-[14px]">
+                          {feature === "Free WiFi" ? "wifi" :
+                           feature === "Parking Available" ? "local_parking" :
+                           feature === "Air Conditioned" ? "ac_unit" :
+                           feature === "Unli Rice" ? "rice_bowl" :
+                           feature === "Outdoor Seating" ? "deck" :
+                           feature === "Delivery" ? "delivery_dining" :
+                           feature === "Function Room" ? "event" : "check_circle"}
+                        </span>
+                        {feature}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl px-6 text-sm font-bold text-white shadow-lg transition-all ${
+                    isSubmitting ? "bg-slate-400 cursor-not-allowed shadow-none" : "bg-primary shadow-primary/20 hover:bg-primary-light hover:-translate-y-0.5 active:translate-y-0"
+                  }`}
+                >
+                  {isSubmitting ? <span className="animate-spin material-symbols-outlined text-[18px]">progress_activity</span> : <span className="material-symbols-outlined text-[18px]">add_task</span>}
+                  {isSubmitting ? "Adding..." : "Add Branch"}
+                </button>
+              </form>
+
+              {/* Feedback Messages */}
+              <div className="flex flex-col gap-2">
+                {error && (
+                  <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                    <span className="material-symbols-outlined text-[18px]">error</span>
+                    {error}
+                  </div>
+                )}
+                {successMsg && (
+                  <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                    <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                    {successMsg}
+                  </div>
+                )}
+              </div>
+
+              {/* Branch Cards */}
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {branches.map((branch) => (
+                  <article key={branch.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                      {branch.image ? (
+                        <img src={branch.image} alt={branch.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center bg-slate-200">
+                          <span className="material-symbols-outlined text-4xl text-slate-400">store</span>
+                        </div>
+                      )}
+                      {branch.status === "coming-soon" && (
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                          <span className="bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[18px]">schedule</span>
+                            Coming Soon
+                          </span>
+                        </div>
+                      )}
+                      <div className="absolute top-3 right-3">
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${branch.status === "open" ? "bg-green-500 text-white" : "bg-amber-500 text-white"}`}>
+                          <span className="material-symbols-outlined text-[14px]">{branch.status === "open" ? "check_circle" : "schedule"}</span>
+                          {branch.status === "open" ? "OPEN" : "SOON"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="space-y-3 p-4">
+                      <h3 className="text-lg font-bold text-slate-900">{branch.name}</h3>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-start gap-2">
+                          <span className="material-symbols-outlined text-[16px] text-primary mt-0.5">location_on</span>
+                          <span className="text-slate-600">{branch.address}</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="material-symbols-outlined text-[16px] text-primary mt-0.5">schedule</span>
+                          <div className="text-slate-600 text-xs">
+                            {(() => {
+                              const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
+                              const openDays = days.filter(d => branch.hours[d]?.open);
+                              if (openDays.length === 0) return <span className="italic">Closed all days</span>;
+                              const formatTime = (t: string) => {
+                                const [h, m] = t.split(":");
+                                const hour = parseInt(h);
+                                const ampm = hour >= 12 ? "PM" : "AM";
+                                const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+                                return `${displayHour}:${m} ${ampm}`;
+                              };
+                              const grouped = [] as { days: string[], openTime: string, closeTime: string }[];
+                              let current: { days: string[], openTime: string, closeTime: string } | null = null;
+                              openDays.forEach((day) => {
+                                const hrs = branch.hours[day];
+                                const timeKey = `${hrs.openTime}-${hrs.closeTime}`;
+                                if (current && `${current.openTime}-${current.closeTime}` === timeKey) {
+                                  current.days.push(day);
+                                } else {
+                                  if (current) grouped.push(current);
+                                  current = { days: [day], openTime: hrs.openTime, closeTime: hrs.closeTime };
+                                }
+                              });
+                              if (current) grouped.push(current);
+                              return grouped.map((g, i) => (
+                                <div key={i}>
+                                  <span className="font-medium">{g.days.length === 1 
+                                    ? g.days[0].charAt(0).toUpperCase() + g.days[0].slice(1) 
+                                    : g.days[0].slice(0, 3) + "-" + g.days[g.days.length - 1].slice(0, 3)}</span>
+                                  : {formatTime(g.openTime)} - {formatTime(g.closeTime)}
+                                </div>
+                              ));
+                            })()}
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="material-symbols-outlined text-[16px] text-primary mt-0.5">phone</span>
+                          <span className="text-slate-600">{branch.phone || "N/A"}</span>
+                        </div>
+                      </div>
+                      {branch.features.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                          {branch.features.map((f) => (
+                            <span key={f} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">
+                              <span className="material-symbols-outlined text-[12px]">
+                                {f === "Free WiFi" ? "wifi" : f === "Parking Available" ? "local_parking" : f === "Air Conditioned" ? "ac_unit" : f === "Unli Rice" ? "rice_bowl" : f === "Outdoor Seating" ? "deck" : f === "Delivery" ? "delivery_dining" : f === "Function Room" ? "event" : "check_circle"}
+                              </span>
+                              {f}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 pt-3 border-t border-slate-100">
+                        <button
+                          className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-wider transition-all border ${branch.status === "open" ? "bg-green-600 text-white border-transparent shadow-md shadow-green-600/20" : "bg-amber-500 text-white border-transparent shadow-md shadow-amber-500/20"}`}
+                          onClick={() => updateBranchStatus(branch.id, branch.status === "open" ? "coming-soon" : "open")}
+                        >
+                          <span className="material-symbols-outlined text-[14px]">{branch.status === "open" ? "check_circle" : "schedule"}</span>
+                          {branch.status === "open" ? "Open" : "Coming Soon"}
+                        </button>
+                        <button
+                          className="inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-wider bg-red-500 text-white border-transparent shadow-md shadow-red-500/20 transition-all hover:bg-red-600"
+                          onClick={() => deleteBranchItem(branch.id)}
+                        >
+                          <span className="material-symbols-outlined text-[14px]">delete</span>
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              {branches.length === 0 && (
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+                  <span className="material-symbols-outlined text-4xl text-slate-300 mb-2">store</span>
+                  <p className="font-semibold text-slate-700">No branches yet.</p>
+                  <p className="mt-1 text-sm text-slate-500">Add your first branch above.</p>
+                </div>
+              )}
+
+              <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600">
+                Total Branches: <span className="font-bold text-primary">{branches.length}</span> · Open:{" "}
+                <span className="font-bold text-green-600">{branches.filter((b) => b.status === "open").length}</span> · Coming Soon:{" "}
+                <span className="font-bold text-amber-500">{branches.filter((b) => b.status === "coming-soon").length}</span>
               </div>
             </section>
           ) : (

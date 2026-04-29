@@ -6,6 +6,12 @@ import {
   updateMenuItem,
   deleteMenuItem,
 } from "./controllers/menuController.js";
+import {
+  getBranches,
+  addBranch,
+  updateBranch,
+  deleteBranch,
+} from "./controllers/branchController.js";
 import { login } from "./controllers/authController.js";
 import { requireAuth } from "./middleware/auth.js";
 import { connectDB } from "./config/db.js";
@@ -27,6 +33,11 @@ app.get("/api/menu", getMenu);
 app.post("/api/menu", requireAuth, addMenuItem);
 app.patch("/api/menu/:id", requireAuth, updateMenuItem);
 app.delete("/api/menu/:id", requireAuth, deleteMenuItem);
+
+app.get("/api/branches", getBranches);
+app.post("/api/branches", requireAuth, addBranch);
+app.patch("/api/branches/:id", requireAuth, updateBranch);
+app.delete("/api/branches/:id", requireAuth, deleteBranch);
 
 function start(port, attemptsLeft = 10) {
   const server = app.listen(port, () => {

@@ -5,7 +5,7 @@ import LoginModal from "./components/LoginModal";
 import ItemDetailModal from "./components/ItemDetailModal";
 
 type Branch = {
-  id: number;
+  id: string;
   name: string;
   status: "open" | "coming-soon";
   image: string;
@@ -36,6 +36,7 @@ function App() {
   const [showFullMenu, setShowFullMenu] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [activeFilters, setActiveFilters] = useState<string[]>(["all"]);
+  const [branches, setBranches] = useState<Branch[]>([]);
   const [activeBranch, setActiveBranch] = useState(0);
 
   const menuFilters = [
@@ -94,44 +95,14 @@ function App() {
       });
   }, []);
 
-  const branches: Branch[] = [
-    {
-      id: 1,
-      name: "Valencia City - Main Branch",
-      status: "open",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBHvLdEiM7DVTHX6CcVSapWeFf9F84ZkScXygOfwJE5enR5gkK0wlES57aZm84uoJbsrAPVLTjX0hux89nIKcja2zMwlvz5XsVrgNn51noI7p665y-KRZ0AHAFqhEuPPtug2WAs-mcVAqIRyuTxbqgxEhqYErLfylVSLlIzva__r5CR9bTgmy8fJGcASjjC_FAZ8vc582qyBxkC9p19hFiRhQkUEgeYlyKvKLWm5C-YIepGzj4h_Y8le7pUNgqsXYJU3mrpOJPYrQA",
-      address: "Purok 1, Sayre Highway, Valencia City, Bukidnon, Philippines",
-      hours: "Monday - Sunday: 10:00 AM - 9:00 PM",
-      phone: "+63 912 345 6789",
-      email: "hello@chadenanag.com",
-      features: ["Free WiFi", "Parking Available", "Air Conditioned", "Unli Rice"],
-      mapUrl: "https://goo.gl/maps/valencia-branch",
-    },
-    {
-      id: 2,
-      name: "Malaybalay City Branch",
-      status: "open",
-      image: "/branch2.jpg",
-      address: "Fortich Street, Malaybalay City, Bukidnon, Philippines",
-      hours: "Monday - Sunday: 9:00 AM - 10:00 PM",
-      phone: "+63 923 456 7890",
-      email: "malaybalay@chadenanag.com",
-      features: ["Free WiFi", "Parking Available", "Outdoor Seating", "Delivery"],
-      mapUrl: "https://goo.gl/maps/malaybalay-branch",
-    },
-    {
-      id: 3,
-      name: "Cagayan de Oro - Coming Soon",
-      status: "coming-soon",
-      image: "/coming-soon.jpg",
-      address: "CM Recto Avenue, Cagayan de Oro City, Misamis Oriental",
-      hours: "Opening 2025 - Stay Tuned!",
-      phone: "+63 935 678 9012",
-      email: "cdo@chadenanag.com",
-      features: ["Free WiFi", "Parking Available", "Air Conditioned", "Function Room"],
-      mapUrl: "#",
-    },
-  ];
+  useEffect(() => {
+    fetch("/api/branches")
+      .then((r) => r.json())
+      .then((items) => {
+        if (Array.isArray(items) && items.length > 0) setBranches(items);
+      })
+      .catch(() => {});
+  }, []);
 
   if (adminMode) {
     return <AdminPortal />;
@@ -479,6 +450,7 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
         </section>
         <FeatureCarousel />
 
+        {branches.length > 0 && (
         <section id="location" className="max-w-7xl mx-auto px-6 py-16 space-y-12">
           <div className="text-center space-y-4 max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
@@ -575,9 +547,43 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">Operating Hours</h4>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">
-                          {branches[activeBranch].hours}
-                        </p>
+                        <div className="text-gray-600 dark:text-gray-300 mt-1 text-sm space-y-1">
+                          {(() => {
+                            const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
+                            const hrs = branches[activeBranch].hours;
+                            const openDays = days.filter(d => hrs[d]?.open);
+                            if (openDays.length === 0) return <span className="italic">Closed all days</span>;
+                            const formatTime = (t: string) => {
+                              if (!t) return "";
+                              const [h, m] = t.split(":");
+                              const hour = parseInt(h);
+                              const ampm = hour >= 12 ? "PM" : "AM";
+                              const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+                              return `${displayHour}:${m} ${ampm}`;
+                            };
+                            const grouped = [] as { days: string[], openTime: string, closeTime: string }[];
+                            let current: { days: string[], openTime: string, closeTime: string } | null = null;
+                            openDays.forEach((day) => {
+                              const dayHrs = hrs[day];
+                              const timeKey = `${dayHrs.openTime}-${dayHrs.closeTime}`;
+                              if (current && `${current.openTime}-${current.closeTime}` === timeKey) {
+                                current.days.push(day);
+                              } else {
+                                if (current) grouped.push(current);
+                                current = { days: [day], openTime: dayHrs.openTime, closeTime: dayHrs.closeTime };
+                              }
+                            });
+                            if (current) grouped.push(current);
+                            return grouped.map((g, i) => (
+                              <div key={i}>
+                                <span className="font-medium">{g.days.length === 1
+                                  ? g.days[0].charAt(0).toUpperCase() + g.days[0].slice(1)
+                                  : g.days[0].slice(0, 3) + "-" + g.days[g.days.length - 1].slice(0, 3)}</span>
+                                : {formatTime(g.openTime)} - {formatTime(g.closeTime)}
+                              </div>
+                            ));
+                          })()}
+                        </div>
                       </div>
                     </div>
 
@@ -668,6 +674,7 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
             </div>
           </div>
         </section>
+        )}
 
         <section id="why" className="px-6 py-16">
           <div className="max-w-[960px] mx-auto">
