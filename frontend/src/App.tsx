@@ -4,13 +4,29 @@ import AdminPortal from "./components/AdminPortal";
 import LoginModal from "./components/LoginModal";
 import ItemDetailModal from "./components/ItemDetailModal";
 
+type DayHours = {
+  open: boolean;
+  openTime: string;
+  closeTime: string;
+};
+
+type BranchHours = {
+  monday: DayHours;
+  tuesday: DayHours;
+  wednesday: DayHours;
+  thursday: DayHours;
+  friday: DayHours;
+  saturday: DayHours;
+  sunday: DayHours;
+};
+
 type Branch = {
   id: string;
   name: string;
   status: "open" | "coming-soon";
   image: string;
   address: string;
-  hours: string;
+  hours: BranchHours;
   phone: string;
   email: string;
   features: string[];
@@ -549,7 +565,8 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                         <h4 className="font-bold text-gray-900 dark:text-white">Operating Hours</h4>
                         <div className="text-gray-600 dark:text-gray-300 mt-1 text-sm space-y-1">
                           {(() => {
-                            const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
+                            type DayKey = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
+                            const days: DayKey[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
                             const hrs = branches[activeBranch].hours;
                             const openDays = days.filter(d => hrs[d]?.open);
                             if (openDays.length === 0) return <span className="italic">Closed all days</span>;
@@ -561,8 +578,8 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                               const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
                               return `${displayHour}:${m} ${ampm}`;
                             };
-                            const grouped = [] as { days: string[], openTime: string, closeTime: string }[];
-                            let current: { days: string[], openTime: string, closeTime: string } | null = null;
+                            const grouped = [] as { days: DayKey[], openTime: string, closeTime: string }[];
+                            let current: { days: DayKey[], openTime: string, closeTime: string } | null = null;
                             openDays.forEach((day) => {
                               const dayHrs = hrs[day];
                               const timeKey = `${dayHrs.openTime}-${dayHrs.closeTime}`;
@@ -653,26 +670,7 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
               </div>
             </div>
           </div>
-          <div className="bg-primary dark:bg-green-900 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-2xl mt-8">
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <h3 className="text-3xl font-bold text-white mb-4">Ready to satisfy your cravings?</h3>
-              <p className="text-green-100 mb-8 text-lg">We don&apos;t accept reservations, but we always find room for family. Drop by today!</p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <a
-                  href="#best-sellers"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowFullMenu(true);
-                    document.getElementById("best-sellers")?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="bg-white text-primary font-bold py-3 px-8 rounded-xl hover:bg-gray-100 transition shadow-lg text-center"
-                >
-                  View Full Menu
-                </a>
-                <a href="#contact" className="bg-green-700 dark:bg-green-800 text-white font-bold py-3 px-8 rounded-xl hover:bg-green-600 transition shadow-lg border border-green-600 text-center">Contact Us</a>
-              </div>
-            </div>
-          </div>
+ 
         </section>
         )}
 
@@ -715,6 +713,48 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
           </div>
         </section>
 
+        {/* Facebook Posts Section */}
+        <section id="facebook" className="px-6 py-16 bg-gray-50 dark:bg-gray-900">
+          <div className="max-w-[1200px] mx-auto">
+            <div className="flex flex-col gap-4 text-center items-center mb-10">
+              <span className="text-primary font-bold tracking-wider uppercase text-sm flex items-center gap-2">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Follow Us
+              </span>
+              <h2 className="text-primary-dark tracking-tight text-[32px] font-black leading-tight md:text-5xl max-w-[720px]">Latest from Facebook</h2>
+              <p className="text-slate-600 text-lg font-normal leading-relaxed max-w-[600px]">Stay updated with our newest offers, events, and delicious updates!</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[1100px] mx-auto">
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <iframe
+                  src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0GPgFfz8WHPAg1sy4sHQtmLDhSgVyvWotHFGLQFz8Z6K6xeLVNJHsnYyc9SAg4EPRl%26id%3D100090756825573&show_text=true&width=500"
+                  width="500"
+                  height="250"
+                  style={{ border: "none", overflow: "hidden" }}
+                  scrolling="no"
+                  frameBorder="0"
+                  allowFullScreen={true}
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                />
+              </div>
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <iframe
+                  src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0xrVam7dU228gC3KLsfzqiBnJPsEa8pXvppVfs7QBNHuj1bf1hB9n1UwHrHeZm7V2l%26id%3D100090756825573&show_text=true&width=500"
+                  width="500"
+                  height="689"
+                  style={{ border: "none", overflow: "hidden" }}
+                  scrolling="no"
+                  frameBorder="0"
+                  allowFullScreen={true}
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="order" className="my-10 px-6">
           <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 md:px-20 md:py-24 text-center max-w-[960px] mx-auto">
             <div className="relative z-10 flex flex-col items-center gap-6">
@@ -725,11 +765,11 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
               <h2 className="text-white tracking-tight text-3xl md:text-5xl font-black leading-tight max-w-[800px]">Kaon na ta sa ChaDe Inaag!</h2>
               <p className="text-white/80 text-lg md:text-xl max-w-[600px]">Ready to satisfy your cravings? Order now for delivery or visit our nearest branch today!</p>
               <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center max-w-md">
-                <a className="flex items-center justify-center gap-2 rounded-full h-14 px-8 bg-white text-primary hover:bg-neutral-100 transition-colors text-base font-bold shadow-lg w-full sm:w-auto" href="#">
+                <a className="flex items-center justify-center gap-2 rounded-full h-14 px-8 bg-white text-primary hover:bg-neutral-100 transition-colors text-base font-bold shadow-lg w-full sm:w-auto" href="https://m.me/100090756825573" target="_blank" rel="noopener noreferrer">
                   <span className="material-symbols-outlined">chat</span>
                   <span className="truncate">Order via Messenger</span>
                 </a>
-                <a className="flex items-center justify-center gap-2 rounded-full h-14 px-8 bg-transparent border-2 border-white/30 text-white hover:bg-white/10 transition-colors text-base font-bold w-full sm:w-auto" href="#contact">
+                <a className="flex items-center justify-center gap-2 rounded-full h-14 px-8 bg-transparent border-2 border-white/30 text-white hover:bg-white/10 transition-colors text-base font-bold w-full sm:w-auto" href="tel:09363700327">
                   <span className="material-symbols-outlined">call</span>
                   <span className="truncate">Call Now</span>
                 </a>

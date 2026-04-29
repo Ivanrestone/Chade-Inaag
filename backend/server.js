@@ -12,6 +12,13 @@ import {
   updateBranch,
   deleteBranch,
 } from "./controllers/branchController.js";
+import { getFacebookPosts } from "./controllers/facebookController.js";
+import {
+  getFacebookEmbeds,
+  addFacebookEmbed,
+  updateFacebookEmbed,
+  deleteFacebookEmbed,
+} from "./controllers/facebookEmbedController.js";
 import { login } from "./controllers/authController.js";
 import { requireAuth } from "./middleware/auth.js";
 import { connectDB } from "./config/db.js";
@@ -38,6 +45,13 @@ app.get("/api/branches", getBranches);
 app.post("/api/branches", requireAuth, addBranch);
 app.patch("/api/branches/:id", requireAuth, updateBranch);
 app.delete("/api/branches/:id", requireAuth, deleteBranch);
+
+app.get("/api/facebook/posts", getFacebookPosts);
+
+app.get("/api/facebook/embeds", getFacebookEmbeds);
+app.post("/api/facebook/embeds", requireAuth, addFacebookEmbed);
+app.patch("/api/facebook/embeds/:id", requireAuth, updateFacebookEmbed);
+app.delete("/api/facebook/embeds/:id", requireAuth, deleteFacebookEmbed);
 
 function start(port, attemptsLeft = 10) {
   const server = app.listen(port, () => {
