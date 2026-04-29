@@ -18,7 +18,116 @@ export type Slide = {
   features?: Feature[];
 };
 
-const slides: Slide[] = [
+type MenuItem = {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  active: boolean;
+  unliRice: boolean;
+  bestSeller: boolean;
+  image: string;
+};
+
+const categoryFeatures: Record<string, Feature[]> = {
+  Chicken: [
+    { icon: "outdoor_grill", text: "Charcoal Grilled", style: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30" },
+    { icon: "rice_bowl", text: "Unli Rice Available", style: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30" },
+    { icon: "local_fire_department", text: "Smoky Flavor", style: "text-orange-600 bg-orange-100 dark:text-orange-400 dark:bg-orange-900/30" },
+    { icon: "schedule", text: "15-20 Mins Prep", style: "text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/30" },
+  ],
+  BBQ: [
+    { icon: "outdoor_grill", text: "Charcoal Grilled", style: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30" },
+    { icon: "local_fire_department", text: "Smoky Flavor", style: "text-orange-600 bg-orange-100 dark:text-orange-400 dark:bg-orange-900/30" },
+    { icon: "timer", text: "Freshly Cooked", style: "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+    { icon: "star", text: "Best Seller", style: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30" },
+  ],
+  Pork: [
+    { icon: "outdoor_grill", text: "Charcoal Grilled", style: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30" },
+    { icon: "local_fire_department", text: "Smoky Flavor", style: "text-orange-600 bg-orange-100 dark:text-orange-400 dark:bg-orange-900/30" },
+    { icon: "groups", text: "Good for Sharing", style: "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+    { icon: "star", text: "Best Seller", style: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30" },
+  ],
+  Beef: [
+    { icon: "outdoor_grill", text: "Charcoal Grilled", style: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30" },
+    { icon: "local_fire_department", text: "Smoky Flavor", style: "text-orange-600 bg-orange-100 dark:text-orange-400 dark:bg-orange-900/30" },
+    { icon: "groups", text: "Good for Sharing", style: "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+    { icon: "schedule", text: "20-25 Mins Prep", style: "text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/30" },
+  ],
+  Fish: [
+    { icon: "water_drop", text: "Fresh Catch", style: "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30" },
+    { icon: "outdoor_grill", text: "Charcoal Grilled", style: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30" },
+    { icon: "schedule", text: "15-20 Mins Prep", style: "text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/30" },
+    { icon: "groups", text: "Good for Sharing", style: "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+  ],
+  Seafood: [
+    { icon: "water_drop", text: "Fresh Catch", style: "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30" },
+    { icon: "outdoor_grill", text: "Charcoal Grilled", style: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30" },
+    { icon: "set_meal", text: "Served w/ Sawsawan", style: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30" },
+    { icon: "groups", text: "Good for Sharing", style: "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+  ],
+  Dessert: [
+    { icon: "icecream", text: "Refreshing", style: "text-pink-600 bg-pink-100 dark:text-pink-400 dark:bg-pink-900/30" },
+    { icon: "cake", text: "Sweet Treat", style: "text-purple-600 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30" },
+    { icon: "schedule", text: "5-10 Mins Prep", style: "text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/30" },
+    { icon: "favorite", text: "Crowd Favorite", style: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30" },
+  ],
+  Drinks: [
+    { icon: "local_cafe", text: "Ice Cold", style: "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30" },
+    { icon: "schedule", text: "Instant Serve", style: "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+    { icon: "favorite", text: "Refreshing", style: "text-pink-600 bg-pink-100 dark:text-pink-400 dark:bg-pink-900/30" },
+    { icon: "groups", text: "Perfect Pair", style: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30" },
+  ],
+  Other: [
+    { icon: "rice_bowl", text: "Unli Rice", style: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30" },
+    { icon: "schedule", text: "Instant Serve", style: "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+  ],
+};
+
+function getSeasonalTag(category: string): Badge {
+  const month = new Date().getMonth();
+  const isHot = month >= 2 && month <= 5;
+  const isRainy = month >= 6 && month <= 10;
+
+  if (category === "Dessert" && isHot) {
+    return { icon: "icecream", text: "Seasonal Special", style: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-200" };
+  }
+  if ((category === "Fish" || category === "Seafood") && isHot) {
+    return { icon: "recommend", text: "Chef's Recommendation", style: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200" };
+  }
+  if (category === "BBQ" && isRainy) {
+    return { icon: "new_releases", text: "New Offer", style: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200" };
+  }
+  if (category === "Dessert" && isRainy) {
+    return { icon: "soup_kitchen", text: "Rainy Day Special", style: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200" };
+  }
+  return { icon: "verified", text: "Best Seller" };
+}
+
+function menuItemToSlide(item: MenuItem): Slide {
+  const nameParts = item.name.split(" ");
+  const titleLine1 = nameParts.length > 1 ? nameParts.slice(0, -1).join(" ") : "";
+  const titleEmphasis = nameParts.length > 1 ? nameParts[nameParts.length - 1] : item.name;
+
+  return {
+    key: item.id,
+    image: item.image,
+    imageBadge: item.unliRice
+      ? { icon: "rice_bowl", text: "UNLI RICE" }
+      : { icon: "verified", text: "Bestseller" },
+    tag: getSeasonalTag(item.category),
+    titleLine1,
+    titleEmphasis,
+    description: item.description,
+    price: `₱${item.price}`,
+    ctaText: "Order Now",
+    ctaHref: "#order",
+    features: categoryFeatures[item.category] || categoryFeatures.Other,
+  };
+}
+
+const fallbackSlides: Slide[] = [
   {
     key: "halo-halo",
     image:
@@ -77,12 +186,30 @@ const slides: Slide[] = [
 ];
 
 export default function FeatureCarousel() {
-  const [index, setIndex] = useState(1);
+  const [slides, setSlides] = useState<Slide[]>(fallbackSlides);
+  const [index, setIndex] = useState(0);
   const [show, setShow] = useState(true);
   const [direction, setDirection] = useState(1);
   const [paused, setPaused] = useState(false);
   const [dragging, setDragging] = useState(false);
   const startXRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/menu")
+      .then((r) => r.json())
+      .then((items) => {
+        if (Array.isArray(items)) {
+          const bestSellers = items.filter((i: MenuItem) => i.active && i.bestSeller);
+          const toShow = bestSellers.length > 0 ? bestSellers : items.filter((i: MenuItem) => i.active).slice(0, 5);
+          if (toShow.length > 0) {
+            setSlides(toShow.map(menuItemToSlide));
+            setIndex(0);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const slide = slides[index];
 
   const changeTo = (i: number, dir: number) => {
