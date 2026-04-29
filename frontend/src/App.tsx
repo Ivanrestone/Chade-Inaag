@@ -198,23 +198,6 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
             </p>
           </div>
           <div className="max-w-[1200px] mx-auto">
-            {/* Filter Buttons */}
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-              {menuFilters.map((f) => (
-                <button
-                  key={f.key}
-                  onClick={() => toggleFilter(f.key)}
-                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                    activeFilters.includes(f.key)
-                      ? "bg-primary text-white shadow-md shadow-primary/30"
-                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-[16px]">{f.icon}</span>
-                  {f.label}
-                </button>
-              ))}
-            </div>
             {!showFullMenu ? (
               // Best Sellers View (3-5 items max)
               (() => {
@@ -290,10 +273,26 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
               })()
             ) : (
               // Full Menu Categorized View
-              (() => {
-                const categories = getFilteredCategories();
-                const hasItems = categories.some((category) => {
-                  return menu.filter((i) => {
+              <>
+              {/* Filter Buttons */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8">
+                {menuFilters.map((f) => (
+                  <button
+                    key={f.key}
+                    onClick={() => toggleFilter(f.key)}
+                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                      activeFilters.includes(f.key)
+                        ? "bg-primary text-white shadow-md shadow-primary/30"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[16px]">{f.icon}</span>
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+              {getFilteredCategories().reduce((acc: {cat: string; items: MenuItem[]}[], category) => {
+                  const categoryItems = menu.filter((i) => {
                     if (!i.active || i.category !== category) return false;
                     if (!activeFilters.includes("all")) {
                       return activeFilters.every((f) => {
@@ -303,18 +302,18 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                       });
                     }
                     return true;
-                  }).length > 0;
-                });
-                if (!hasItems) return (
+                  });
+                  if (categoryItems.length > 0) acc.push({cat: category, items: categoryItems});
+                  return acc;
+                }, []).length === 0 ? (
                   <div className="text-center py-16">
                     <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600 mb-4 block">search_off</span>
                     <p className="text-lg font-semibold text-slate-500 dark:text-slate-400">No items match your filters</p>
                     <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Try removing a filter or click "All" to see everything</p>
                   </div>
-                );
-                return (
+                ) : (
               <div className="space-y-12">
-                {categories.map((category) => {
+                {getFilteredCategories().map((category) => {
                   const categoryItems = menu.filter((i) => {
                     if (!i.active || i.category !== category) return false;
                     if (!activeFilters.includes("all")) {
@@ -405,8 +404,8 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                   );
                 })}
               </div>
-                );
-              })()
+                )}
+              </>
             )}
             <div className="mt-12 text-center">
               <a
