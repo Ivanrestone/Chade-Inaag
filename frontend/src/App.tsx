@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import FeatureCarousel from "./components/FeatureCarousel";
 import AdminPortal from "./components/AdminPortal";
 import LoginModal from "./components/LoginModal";
+import ItemDetailModal from "./components/ItemDetailModal";
 
 function App() {
   const authStorageKey = "change_inaag_admin_auth";
   const [showLogin, setShowLogin] = useState(false);
   const [adminMode, setAdminMode] = useState(() => window.localStorage.getItem(authStorageKey) === "true");
   type MenuItem = {
-    id: number;
+    id: string;
     name: string;
     category: string;
     description: string;
@@ -20,6 +21,7 @@ function App() {
   };
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [showFullMenu, setShowFullMenu] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
   useEffect(() => {
     fetch("/api/menu")
@@ -121,8 +123,8 @@ function App() {
                       <span className="material-symbols-outlined">star</span>
                     </div>
                     <div>
-                      <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Top Rated</p>
-                      <p className="text-slate-900 dark:text-white font-bold text-lg leading-none">#1 In Town</p>
+                      <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Unli</p>
+                      <p className="text-slate-900 dark:text-white font-bold text-lg leading-none">Rice</p>
                     </div>
                   </div>
                 </div>
@@ -168,8 +170,13 @@ function App() {
                       </span>
                     )}
                   </div>
-                  <div className="relative h-64 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
+                  <div 
+                    className="relative h-64 overflow-hidden cursor-pointer group/img"
+                    onClick={() => setSelectedItem(i)}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1] opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                      <span className="material-symbols-outlined text-white text-4xl scale-75 group-hover/img:scale-100 transition-transform duration-500">zoom_in</span>
+                    </div>
                     <img src={i.image} alt={i.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   </div>
                   <div className="p-6 flex flex-col flex-grow">
@@ -395,6 +402,13 @@ function App() {
             setShowLogin(false);
             setAdminMode(true);
           }}
+        />
+      )}
+
+      {selectedItem && (
+        <ItemDetailModal 
+          item={selectedItem} 
+          onClose={() => setSelectedItem(null)} 
         />
       )}
     </>

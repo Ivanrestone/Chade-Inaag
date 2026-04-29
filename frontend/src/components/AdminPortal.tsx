@@ -4,7 +4,7 @@ import type { FormEvent } from "react";
 type DashboardPage = "overview" | "menu" | "users";
 
 type MenuItem = {
-  id: number;
+  id: string;
   name: string;
   category: string;
   description: string;
@@ -23,7 +23,7 @@ const categories = ["Chicken", "Pork", "Beef", "Fish", "Seafood", "BBQ", "Desser
 
 const initialMenuItems: MenuItem[] = [
   {
-    id: 1,
+    id: "1",
     name: "Z1 Paa",
     category: "Chicken",
     description: "Signature grilled chicken leg quarter with unlimited rice.",
@@ -35,7 +35,7 @@ const initialMenuItems: MenuItem[] = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuAjGO8S2Ah2D3OOfKJNRya7FFJLZvePuShMjk7DYYtGzHAyfBmemT3rIoq1iddox66iRU3rrjNYpSHJXTE_UcEEIfanBSiWDrHWcF4StZdJ8xCsNDgbhZlyhoT-Dkgz9xAHNiZkOzCOYOGQ3T2O44ZDbgOiNMK-gU5mzW1-DrMnnqrhdkLObFyC-AHygaVxdKDG_WKdQxCHnMf2d_arBzkRfpyOtiB6KP2W1KH5-nrqKZ1YIPxv1z2qBouXmVKwkBJ4HM-5mJZ5K-w",
   },
   {
-    id: 2,
+    id: "2",
     name: "Lechon Sisig",
     category: "Pork",
     description: "Crunchy pork bits with onions, chili, and calamansi.",
@@ -47,7 +47,7 @@ const initialMenuItems: MenuItem[] = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ26EsuyKu_vglDzGWxPAdVthroqZBvHZLUP25eLXN0Qp4Ssjcbvv5OYj9lZ5pRSg1TJH-rIKtYVJ0Qct8NAWQvmWsZ2jod_yl_vR7f12pjX5Fobh7IpRfBJH5Nbe9wu3qhycUQ5pLovikfI0k91REEITQ_fbuNK5jpyjpxj2bWCFfQChtLaxeyVTfXS1ajXQrRJEpvV0jHHWE3I3gAdx3_du1I8CM3NMO8LAd3LSd7bXCxhn8Hd79ojmvRqdaM_hQLJQEyiSegI",
   },
   {
-    id: 3,
+    id: "3",
     name: "BBQ T1",
     category: "BBQ",
     description: "Classic pork barbecue skewers, sweet and savory.",
@@ -59,7 +59,7 @@ const initialMenuItems: MenuItem[] = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDmfZ08ILCzI6aF8yAf-p1sG2orGAWfpRyYgtixNbw__FEZ-B1dYyXFJL1JKEiNyHQotd8k9I1BQ69tR154g0TzXNv-ZmAeWp1Cdvb_jcB9Kk3F2bsKymaFHQeQF8fw5EOurBEQwe6thVmdxUiyhqV0R4esO-HL0YykH9WEcyIgoUO0iC-fYupi28vNyZ176dpA6Eqteion3Aa0UidTxD28Q9ZIiSpr3o2zYLcQSkGbrTyTS9b3M5AypgseWR46aYJ1FF6r9D1t-8w",
   },
   {
-    id: 4,
+    id: "4",
     name: "Special Halo-Halo",
     category: "Dessert",
     description: "Creamy shaved ice dessert with leche flan and ube ice cream.",
@@ -71,7 +71,7 @@ const initialMenuItems: MenuItem[] = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ",
   },
   {
-    id: 5,
+    id: "5",
     name: "Tuna Panga",
     category: "Seafood",
     description: "Succulent grilled tuna jaw marinated in secret sauce.",
@@ -83,7 +83,7 @@ const initialMenuItems: MenuItem[] = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBG5aL36E1DNiy5h7tdzEXtIkq7nNX97yCal9UjoUZb6v9W_B_J2zomd_D3LlZYjCtN6CCgZRGZtvi7HsvTnFreiWqHnpjC6TIjjBfsDzjBjyhJyVerqfRUbAktNDREapQnwdZgjN0LW30b3vEYVrUVOqqw6mw8Ka5BZ9mLv8y5PtrufE1HJ429xLnlfHNIJYonljbjC4EUntvATO2ERDXwvYxjJ06wW0KLfDvmPxsGdCffiPRlYv_MGHUQf8aDi5RnJAC8ymFn1gQ",
   },
   {
-    id: 6,
+    id: "6",
     name: "Baby Backribs",
     category: "Pork",
     description: "Tender ribs glazed in sweet and savory barbecue sauce.",
@@ -118,6 +118,8 @@ export default function AdminPortal() {
   const token = typeof window !== "undefined" ? window.localStorage.getItem("change_inaag_token") || "" : "";
   const [adminUsers, setAdminUsers] = useState<{ id: string; email: string }[]>([]);
   const [adminEmail, setAdminEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
   const [newItem, setNewItem] = useState<Omit<MenuItem, "id">>({
     name: "",
     category: "Chicken",
@@ -210,22 +212,19 @@ export default function AdminPortal() {
     setError("");
   };
 
-  const updatePrice = (id: number, price: number) => {
-    const next = Number.isNaN(price) ? undefined : price;
-    if (typeof next === "number") {
-      fetch(`/api/menu/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ price: next }),
-      })
-        .then((r) => r.json())
-        .then((updated: MenuItem) => {
-          setMenuItems((current) => current.map((item) => (item.id === id ? updated : item)));
-        });
-    }
+  const updatePrice = (id: string, price: number) => {
+    fetch(`/api/menu/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ price }),
+    })
+      .then((r) => r.json())
+      .then((updated: MenuItem) => {
+        setMenuItems((current) => current.map((x) => (x.id === id ? updated : x)));
+      });
   };
 
-  const toggleItemStatus = (id: number) => {
+  const toggleItemStatus = (id: string) => {
     const item = menuItems.find((x) => x.id === id);
     if (!item) return;
     fetch(`/api/menu/${id}`, {
@@ -239,7 +238,7 @@ export default function AdminPortal() {
       });
   };
 
-  const toggleUnliRice = (id: number) => {
+  const toggleUnliRice = (id: string) => {
     const item = menuItems.find((x) => x.id === id);
     if (!item) return;
     fetch(`/api/menu/${id}`, {
@@ -253,7 +252,7 @@ export default function AdminPortal() {
       });
   };
 
-  const toggleBestSeller = (id: number) => {
+  const toggleBestSeller = (id: string) => {
     const item = menuItems.find((x) => x.id === id);
     if (!item) return;
     fetch(`/api/menu/${id}`, {
@@ -267,27 +266,64 @@ export default function AdminPortal() {
       });
   };
 
-  const addItem = (e: FormEvent<HTMLFormElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewItem({ ...newItem, image: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const addItem = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch("/api/menu", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify(newItem),
-    })
-      .then((r) => r.json())
-      .then((created: MenuItem) => {
-        setMenuItems((current) => [created, ...current]);
-        setNewItem({
-          name: "",
-          category: "Chicken",
-          description: "",
-          price: 0,
-          active: true,
-          unliRice: false,
-          bestSeller: false,
-          image: "",
-        });
+    setError("");
+    setSuccessMsg("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/menu", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(newItem),
       });
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error(`Server returned an error (${response.status}). Please check if the image is too large or if the server is running correctly.`);
+      }
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || "Failed to add item");
+      }
+
+      setMenuItems((current) => [data, ...current]);
+      setSuccessMsg("Item added successfully!");
+      setNewItem({
+        name: "",
+        category: "Chicken",
+        description: "",
+        price: 0,
+        active: true,
+        unliRice: false,
+        bestSeller: false,
+        image: "",
+      });
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccessMsg(""), 3000);
+    } catch (err: any) {
+      console.error("Add Item Error:", err);
+      setError(err.message || "An error occurred while adding the item.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isAuthenticated) {
@@ -523,8 +559,33 @@ export default function AdminPortal() {
                   <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Describe the food..." value={newItem.description} onChange={(e) => setNewItem({ ...newItem, description: e.target.value })} required />
                 </div>
                 <div className="md:col-span-6 space-y-1.5">
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Image URL</label>
-                  <input className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Paste image link here..." value={newItem.image} onChange={(e) => setNewItem({ ...newItem, image: e.target.value })} required />
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 ml-1">Upload Picture</label>
+                  <div className="relative group">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                      id="imageUpload"
+                      required
+                    />
+                    <label
+                      htmlFor="imageUpload"
+                      className="h-11 w-full flex items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 px-4 text-sm text-slate-500 cursor-pointer hover:border-primary hover:bg-primary/5 hover:text-primary transition-all overflow-hidden"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">add_photo_alternate</span>
+                      {newItem.image ? (
+                        <span className="truncate text-primary-dark font-medium italic">Image Selected</span>
+                      ) : (
+                        <span>Choose from computer...</span>
+                      )}
+                      {newItem.image && (
+                        <div className="ml-auto h-8 w-8 rounded-lg overflow-hidden border border-primary/20">
+                          <img src={newItem.image} className="h-full w-full object-cover" alt="Preview" />
+                        </div>
+                      )}
+                    </label>
+                  </div>
                 </div>
                 <div className="md:col-span-4 flex items-center justify-between gap-2 h-11 bg-slate-50 rounded-xl px-4 border border-slate-100">
                   <label className="flex items-center gap-2 cursor-pointer group">
@@ -543,12 +604,40 @@ export default function AdminPortal() {
                   </label>
                 </div>
                 <div className="md:col-span-2">
-                  <button type="submit" className="h-11 w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary-light hover:-translate-y-0.5 active:translate-y-0 transition-all">
-                    <span className="material-symbols-outlined text-[18px]">add_task</span>
-                    Add
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className={`h-11 w-full flex items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold text-white shadow-lg transition-all ${
+                      isSubmitting 
+                        ? "bg-slate-400 cursor-not-allowed shadow-none" 
+                        : "bg-primary shadow-primary/20 hover:bg-primary-light hover:-translate-y-0.5 active:translate-y-0"
+                    }`}
+                  >
+                    {isSubmitting ? (
+                      <span className="animate-spin material-symbols-outlined text-[18px]">progress_activity</span>
+                    ) : (
+                      <span className="material-symbols-outlined text-[18px]">add_task</span>
+                    )}
+                    {isSubmitting ? "Adding..." : "Add"}
                   </button>
                 </div>
               </form>
+
+              {/* Feedback Messages */}
+              <div className="flex flex-col gap-2 mt-2">
+                {error && (
+                  <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <span className="material-symbols-outlined text-[18px]">error</span>
+                    {error}
+                  </div>
+                )}
+                {successMsg && (
+                  <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                    {successMsg}
+                  </div>
+                )}
+              </div>
 
               <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                 <label className="relative md:col-span-2">

@@ -8,31 +8,38 @@
 ## Backend
 - Entry: backend/server.js
 - Controllers: backend/controllers/menuController.js
-- Model: backend/models/menuModel.js
-- Data: backend/data/menu.json (JSON persistence)
+- Model: backend/models/Menu.js (MongoDB / Mongoose)
 - Endpoints:
   - GET /api/menu
-  - POST /api/menu
-  - PATCH /api/menu/:id
-  - DELETE /api/menu/:id
+  - POST /api/menu (Requires JWT)
+  - PATCH /api/menu/:id (Requires JWT)
+  - DELETE /api/menu/:id (Requires JWT)
 - Port behavior:
   - Tries 4000 first; if busy, auto-falls back to 4001… up to 10 attempts
 
 ## Frontend
 - Admin portal: frontend/src/components/AdminPortal.tsx
   - Loads menu from /api/menu on mount
-  - Add new item via a form (name, category, price, description, image, active, unliRice, bestSeller)
+  - Add new item via a form (name, category dropdown, price with clear label, description, image, active, unliRice, bestSeller)
   - Update price, active, unliRice, and bestSeller state using PATCH /api/menu/:id
+  - Redesigned status toggles for better recognition:
+    - **Active**: Green visibility icon
+    - **Unli Rice**: Primary check icon
+    - **Best Seller**: Amber star icon
   - Admin Users page in sidebar: list current admins and add by email
 - Landing page: frontend/src/App.tsx
   - Fetches /api/menu and renders active items marked as “Best Seller” (defaults to first 3 active items if none are marked)
   - Clicking “View Full Menu” switches the grid to show all active items
-  - Displays “UNLI RICE” badge only for items with unliRice flag set to true
+  - Displays “UNLI RICE” badge (rice bowl icon) and “BEST SELLER” badge (star icon + pulse animation) on item cards
+  - Clicking a menu item image opens a detailed modal with description and pricing
+- Item Details: frontend/src/components/ItemDetailModal.tsx
+  - Displays high-quality image, badges, category, description, and price
+  - Includes a mock "Add to Cart" action for future expansion
 - Category Guidance:
   - Recommended categories: “Chicken”, “Pork”, “Beef”, “Fish”, “Seafood”, “BBQ”, “Dessert”, “Drinks”
   - Use consistent naming (e.g., “Chicken” instead of “chicken”) for better filtering in the UI
 - Dev proxy: frontend/vite.config.ts
-  - '/api' → http://localhost:4005 (current backend port)
+  - '/api' → http://localhost:4001 (updated to match backend port)
 
 ## Run Instructions
 - Backend:
