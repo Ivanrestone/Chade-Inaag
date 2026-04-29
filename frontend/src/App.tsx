@@ -217,13 +217,21 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
             </div>
             {!showFullMenu ? (
               // Best Sellers View (3-5 items max)
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {(activeFilters.includes("all")
+              (() => {
+                const items = activeFilters.includes("all")
                   ? (menu.filter((i) => i.active && i.bestSeller).length > 0
                     ? menu.filter((i) => i.active && i.bestSeller).slice(0, 5)
                     : menu.filter((i) => i.active).slice(0, 5))
-                  : getFilteredMenu().slice(0, 5)
-                ).map((i) => (
+                  : getFilteredMenu().slice(0, 5);
+                return items.length === 0 ? (
+                  <div className="text-center py-16">
+                    <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600 mb-4 block">search_off</span>
+                    <p className="text-lg font-semibold text-slate-500 dark:text-slate-400">No items match your filters</p>
+                    <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Try removing a filter or click "All" to see everything</p>
+                  </div>
+                ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {items.map((i) => (
                   <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
                     <div className="absolute top-4 right-4 z-10 flex flex-wrap justify-end gap-2">
                       {i.bestSeller && (
@@ -278,10 +286,35 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                   </div>
                 ))}
               </div>
+                );
+              })()
             ) : (
               // Full Menu Categorized View
+              (() => {
+                const categories = getFilteredCategories();
+                const hasItems = categories.some((category) => {
+                  return menu.filter((i) => {
+                    if (!i.active || i.category !== category) return false;
+                    if (!activeFilters.includes("all")) {
+                      return activeFilters.every((f) => {
+                        if (f === "bestSeller") return i.bestSeller;
+                        if (f === "unliRice") return i.unliRice;
+                        return true;
+                      });
+                    }
+                    return true;
+                  }).length > 0;
+                });
+                if (!hasItems) return (
+                  <div className="text-center py-16">
+                    <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600 mb-4 block">search_off</span>
+                    <p className="text-lg font-semibold text-slate-500 dark:text-slate-400">No items match your filters</p>
+                    <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Try removing a filter or click "All" to see everything</p>
+                  </div>
+                );
+                return (
               <div className="space-y-12">
-                {getFilteredCategories().map((category) => {
+                {categories.map((category) => {
                   const categoryItems = menu.filter((i) => {
                     if (!i.active || i.category !== category) return false;
                     if (!activeFilters.includes("all")) {
@@ -372,6 +405,8 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                   );
                 })}
               </div>
+                );
+              })()
             )}
             <div className="mt-12 text-center">
               <a
