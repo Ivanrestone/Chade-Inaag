@@ -33,6 +33,116 @@ type Branch = {
   mapUrl: string;
 };
 
+const facebookPosts = [
+  {
+    id: "post1",
+    src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0GPgFfz8WHPAg1sy4sHQtmLDhSgVyvWotHFGLQFz8Z6K6xeLVNJHsnYyc9SAg4EPRl%26id%3D100090756825573&show_text=true&width=500",
+    height: "689",
+  },
+  {
+    id: "post2",
+    src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0xrVam7dU228gC3KLsfzqiBnJPsEa8pXvppVfs7QBNHuj1bf1hB9n1UwHrHeZm7V2l%26id%3D100090756825573&show_text=true&width=500",
+    height: "689",
+  },
+    {
+    id: "post3",
+    src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0GPgFfz8WHPAg1sy4sHQtmLDhSgVyvWotHFGLQFz8Z6K6xeLVNJHsnYyc9SAg4EPRl%26id%3D100090756825573&show_text=true&width=500",
+    height: "689",
+  },
+];
+
+function FacebookCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const itemsPerSlide = isMobile ? 1 : 2;
+  const totalSlides = Math.ceil(facebookPosts.length / itemsPerSlide);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
+
+  const visiblePosts = facebookPosts.slice(
+    currentIndex * itemsPerSlide,
+    currentIndex * itemsPerSlide + itemsPerSlide
+  );
+
+  return (
+    <div className="relative">
+      {/* Carousel Container */}
+      <div className="overflow-hidden rounded-2xl">
+        <div
+          className="flex transition-transform duration-500 ease-in-out gap-6"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {facebookPosts.map((post) => (
+            <div
+              key={post.id}
+              className="w-full md:w-[calc(50%-12px)] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white"
+            >
+              <iframe
+                src={post.src}
+                width="100%"
+                height={post.height}
+                style={{ border: "none", overflow: "hidden" }}
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Navigation Arrows */}
+      {totalSlides > 1 && (
+        <>
+          <button
+            onClick={prevSlide}
+            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all z-10"
+            aria-label="Previous"
+          >
+            <span className="material-symbols-outlined text-2xl">chevron_left</span>
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all z-10"
+            aria-label="Next"
+          >
+            <span className="material-symbols-outlined text-2xl">chevron_right</span>
+          </button>
+        </>
+      )}
+
+      {/* Dots Indicator */}
+      {totalSlides > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          {Array.from({ length: totalSlides }).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`w-2.5 h-2.5 rounded-full transition-all ${
+                idx === currentIndex ? "bg-primary w-6" : "bg-slate-300 hover:bg-slate-400"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const authStorageKey = "change_inaag_admin_auth";
   const [showLogin, setShowLogin] = useState(false);
@@ -726,32 +836,7 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
               <h2 className="text-primary-dark tracking-tight text-[32px] font-black leading-tight md:text-5xl max-w-[720px]">Latest from Facebook</h2>
               <p className="text-slate-600 text-lg font-normal leading-relaxed max-w-[600px]">Stay updated with our newest offers, events, and delicious updates!</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[1100px] mx-auto">
-              <div className="rounded-xl overflow-hidden shadow-lg">
-                <iframe
-                  src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0GPgFfz8WHPAg1sy4sHQtmLDhSgVyvWotHFGLQFz8Z6K6xeLVNJHsnYyc9SAg4EPRl%26id%3D100090756825573&show_text=true&width=500"
-                  width="500"
-                  height="250"
-                  style={{ border: "none", overflow: "hidden" }}
-                  scrolling="no"
-                  frameBorder="0"
-                  allowFullScreen={true}
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                />
-              </div>
-              <div className="rounded-xl overflow-hidden shadow-lg">
-                <iframe
-                  src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0xrVam7dU228gC3KLsfzqiBnJPsEa8pXvppVfs7QBNHuj1bf1hB9n1UwHrHeZm7V2l%26id%3D100090756825573&show_text=true&width=500"
-                  width="500"
-                  height="689"
-                  style={{ border: "none", overflow: "hidden" }}
-                  scrolling="no"
-                  frameBorder="0"
-                  allowFullScreen={true}
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                />
-              </div>
-            </div>
+            <FacebookCarousel />
           </div>
         </section>
 
