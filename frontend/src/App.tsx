@@ -4,6 +4,19 @@ import AdminPortal from "./components/AdminPortal";
 import LoginModal from "./components/LoginModal";
 import ItemDetailModal from "./components/ItemDetailModal";
 
+type Branch = {
+  id: number;
+  name: string;
+  status: "open" | "coming-soon";
+  image: string;
+  address: string;
+  hours: string;
+  phone: string;
+  email: string;
+  features: string[];
+  mapUrl: string;
+};
+
 function App() {
   const authStorageKey = "change_inaag_admin_auth";
   const [showLogin, setShowLogin] = useState(false);
@@ -23,6 +36,7 @@ function App() {
   const [showFullMenu, setShowFullMenu] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [activeFilters, setActiveFilters] = useState<string[]>(["all"]);
+  const [activeBranch, setActiveBranch] = useState(0);
 
   const menuFilters = [
     { key: "all", label: "All", icon: "restaurant_menu" },
@@ -79,6 +93,45 @@ function App() {
         if (Array.isArray(items)) setMenu(items);
       });
   }, []);
+
+  const branches: Branch[] = [
+    {
+      id: 1,
+      name: "Valencia City - Main Branch",
+      status: "open",
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBHvLdEiM7DVTHX6CcVSapWeFf9F84ZkScXygOfwJE5enR5gkK0wlES57aZm84uoJbsrAPVLTjX0hux89nIKcja2zMwlvz5XsVrgNn51noI7p665y-KRZ0AHAFqhEuPPtug2WAs-mcVAqIRyuTxbqgxEhqYErLfylVSLlIzva__r5CR9bTgmy8fJGcASjjC_FAZ8vc582qyBxkC9p19hFiRhQkUEgeYlyKvKLWm5C-YIepGzj4h_Y8le7pUNgqsXYJU3mrpOJPYrQA",
+      address: "Purok 1, Sayre Highway, Valencia City, Bukidnon, Philippines",
+      hours: "Monday - Sunday: 10:00 AM - 9:00 PM",
+      phone: "+63 912 345 6789",
+      email: "hello@chadenanag.com",
+      features: ["Free WiFi", "Parking Available", "Air Conditioned", "Unli Rice"],
+      mapUrl: "https://goo.gl/maps/valencia-branch",
+    },
+    {
+      id: 2,
+      name: "Malaybalay City Branch",
+      status: "open",
+      image: "/branch2.jpg",
+      address: "Fortich Street, Malaybalay City, Bukidnon, Philippines",
+      hours: "Monday - Sunday: 9:00 AM - 10:00 PM",
+      phone: "+63 923 456 7890",
+      email: "malaybalay@chadenanag.com",
+      features: ["Free WiFi", "Parking Available", "Outdoor Seating", "Delivery"],
+      mapUrl: "https://goo.gl/maps/malaybalay-branch",
+    },
+    {
+      id: 3,
+      name: "Cagayan de Oro - Coming Soon",
+      status: "coming-soon",
+      image: "/coming-soon.jpg",
+      address: "CM Recto Avenue, Cagayan de Oro City, Misamis Oriental",
+      hours: "Opening 2025 - Stay Tuned!",
+      phone: "+63 935 678 9012",
+      email: "cdo@chadenanag.com",
+      features: ["Free WiFi", "Parking Available", "Air Conditioned", "Function Room"],
+      mapUrl: "#",
+    },
+  ];
 
   if (adminMode) {
     return <AdminPortal />;
@@ -426,65 +479,174 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
         </section>
         <FeatureCarousel />
 
-        <section id="location" className="max-w-7xl mx-auto px-6 py-16 space-y-16">
+        <section id="location" className="max-w-7xl mx-auto px-6 py-16 space-y-12">
           <div className="text-center space-y-4 max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-              Experience the Taste of <span className="text-primary relative inline-block">Bukidnon</span>
+              Visit Our <span className="text-primary relative inline-block">Branches</span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              Come hungry, leave happy. Enjoy our famous Inasal and unlimited rice in a cozy, rustic atmosphere that feels like home.
+              Experience the authentic taste of Bukidnon at a location near you. More branches coming soon!
             </p>
           </div>
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+
+          {/* Branch Tabs */}
+          <div className="flex flex-wrap justify-center gap-3">
+            {branches.map((branch, idx) => (
+              <button
+                key={branch.id}
+                onClick={() => setActiveBranch(idx)}
+                className={`relative px-6 py-3 rounded-full font-semibold text-sm transition-all ${
+                  activeBranch === idx
+                    ? "bg-primary text-white shadow-lg shadow-primary/30"
+                    : "bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary"
+                }`}
+              >
+                {branch.status === "coming-soon" && (
+                  <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    SOON
+                  </span>
+                )}
+                <span className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[18px]">
+                    {branch.status === "coming-soon" ? "schedule" : "store"}
+                  </span>
+                  {branch.name}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Active Branch Display */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            {/* Branch Info Card */}
             <div className="space-y-6">
-              <div className="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 relative overflow-hidden">
-                <div className="relative z-10">
-                  <h3 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Bisita Na!</h3>
-                  <p className="text-gray-500 dark:text-gray-400 mb-8">Visit our flagship store in the heart of Bukidnon.</p>
-                  <div className="space-y-6">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+                {/* Branch Photo */}
+                <div className="relative h-64 overflow-hidden">
+                  <img
+                    src={branches[activeBranch].image}
+                    alt={branches[activeBranch].name}
+                    className="w-full h-full object-cover"
+                  />
+                  {branches[activeBranch].status === "coming-soon" && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <span className="material-symbols-outlined text-6xl mb-2">rocket_launch</span>
+                        <p className="text-2xl font-bold">Coming Soon</p>
+                        <p className="text-sm opacity-80">Opening 2025</p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="absolute bottom-4 left-4">
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                      branches[activeBranch].status === "open"
+                        ? "bg-green-500 text-white"
+                        : "bg-amber-500 text-white"
+                    }`}>
+                      <span className="material-symbols-outlined text-[14px]">
+                        {branches[activeBranch].status === "open" ? "check_circle" : "schedule"}
+                      </span>
+                      {branches[activeBranch].status === "open" ? "NOW OPEN" : "COMING SOON"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+                    {branches[activeBranch].name}
+                  </h3>
+
+                  <div className="space-y-5">
                     <div className="flex items-start space-x-4">
                       <div className="bg-primary/10 p-3 rounded-xl text-primary shrink-0">
-                        <span className="material-icons">storefront</span>
+                        <span className="material-symbols-outlined">location_on</span>
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">Address</h4>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1">Purok 1, Sayre Highway<br />Valencia City, Bukidnon, Philippines</p>
+                        <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm leading-relaxed">
+                          {branches[activeBranch].address}
+                        </p>
                       </div>
                     </div>
+
                     <div className="flex items-start space-x-4">
                       <div className="bg-primary/10 p-3 rounded-xl text-primary shrink-0">
-                        <span className="material-icons">schedule</span>
+                        <span className="material-symbols-outlined">schedule</span>
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">Operating Hours</h4>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1">Monday - Sunday<br />10:00 AM - 9:00 PM</p>
+                        <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">
+                          {branches[activeBranch].hours}
+                        </p>
                       </div>
                     </div>
+
                     <div className="flex items-start space-x-4">
                       <div className="bg-primary/10 p-3 rounded-xl text-primary shrink-0">
-                        <span className="material-icons">call</span>
+                        <span className="material-symbols-outlined">phone</span>
                       </div>
                       <div>
-                        <h4 className="font-bold text-gray-900 dark:text-white">Contact Us</h4>
-                        <p className="text-gray-600 dark:text-gray-300 mt-1">+63 912 345 6789<br />hello@chadenanag.com</p>
+                        <h4 className="font-bold text-gray-900 dark:text-white">Contact</h4>
+                        <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">
+                          {branches[activeBranch].phone}<br />
+                          {branches[activeBranch].email}
+                        </p>
                       </div>
                     </div>
                   </div>
-                  <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-3">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"><span className="material-icons text-[14px] mr-1">wifi</span> Free WiFi</span>
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300"><span className="material-icons text-[14px] mr-1">local_parking</span> Parking Available</span>
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300"><span className="material-icons text-[14px] mr-1">ac_unit</span> Air Conditioned</span>
+
+                  {/* Features */}
+                  <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
+                    <h4 className="font-bold text-gray-900 dark:text-white mb-3 text-sm">Branch Features</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {branches[activeBranch].features.map((feature) => (
+                        <span
+                          key={feature}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">
+                            {feature === "Free WiFi" ? "wifi" :
+                             feature === "Parking Available" ? "local_parking" :
+                             feature === "Air Conditioned" ? "ac_unit" :
+                             feature === "Unli Rice" ? "rice_bowl" :
+                             feature === "Outdoor Seating" ? "deck" :
+                             feature === "Delivery" ? "delivery_dining" :
+                             feature === "Function Room" ? "event" : "check_circle"}
+                          </span>
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 relative">
-              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHvLdEiM7DVTHX6CcVSapWeFf9F84ZkScXygOfwJE5enR5gkK0wlES57aZm84uoJbsrAPVLTjX0hux89nIKcja2zMwlvz5XsVrgNn51noI7p665y-KRZ0AHAFqhEuPPtug2WAs-mcVAqIRyuTxbqgxEhqYErLfylVSLlIzva__r5CR9bTgmy8fJGcASjjC_FAZ8vc582qyBxkC9p19hFiRhQkUEgeYlyKvKLWm5C-YIepGzj4h_Y8le7pUNgqsXYJU3mrpOJPYrQA" alt="Map location" className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500" />
-              <a href="https://goo.gl/maps/placeholder" target="_blank" className="absolute bottom-4 right-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                <span className="material-icons text-primary text-base">directions</span> Get Directions
-              </a>
+
+            {/* Map / Location Image */}
+            <div className="w-full h-full min-h-[400px] rounded-2xl overflow-hidden shadow-xl border border-gray-200 dark:border-gray-700 relative">
+              <img
+                src={branches[activeBranch].image}
+                alt={`${branches[activeBranch].name} location`}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <h3 className="text-white text-xl font-bold mb-2">{branches[activeBranch].name}</h3>
+                <p className="text-white/80 text-sm mb-4">{branches[activeBranch].address}</p>
+                {branches[activeBranch].status === "open" && (
+                  <a
+                    href={branches[activeBranch].mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-white text-gray-900 px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-100 transition"
+                  >
+                    <span className="material-symbols-outlined text-primary">directions</span>
+                    Get Directions
+                  </a>
+                )}
+              </div>
             </div>
-          </section>
+          </div>
           <div className="bg-primary dark:bg-green-900 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-2xl mt-8">
             <div className="relative z-10 max-w-2xl mx-auto">
               <h3 className="text-3xl font-bold text-white mb-4">Ready to satisfy your cravings?</h3>
