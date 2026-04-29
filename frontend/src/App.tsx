@@ -22,6 +22,55 @@ function App() {
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [showFullMenu, setShowFullMenu] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [activeFilters, setActiveFilters] = useState<string[]>(["all"]);
+
+  const menuFilters = [
+    { key: "all", label: "All", icon: "restaurant_menu" },
+    { key: "bestSeller", label: "Best Seller", icon: "star" },
+    { key: "unliRice", label: "Unli Rice", icon: "rice_bowl" },
+    { key: "Chicken", label: "Chicken", icon: "egg" },
+    { key: "BBQ", label: "BBQ", icon: "outdoor_grill" },
+    { key: "Pork", label: "Pork", icon: "lunch_dining" },
+    { key: "Beef", label: "Beef", icon: "kebab_dining" },
+    { key: "Fish", label: "Fish", icon: "phishing" },
+    { key: "Seafood", label: "Seafood", icon: "set_meal" },
+    { key: "Dessert", label: "Dessert", icon: "cake" },
+    { key: "Drinks", label: "Drinks", icon: "local_cafe" },
+    { key: "Other", label: "Other", icon: "more_horiz" },
+  ];
+
+  const toggleFilter = (key: string) => {
+    if (key === "all") {
+      setActiveFilters(["all"]);
+    } else {
+      setActiveFilters((prev) => {
+        const without = prev.filter((f) => f !== "all" && f !== key);
+        const wasActive = prev.includes(key);
+        const next = wasActive ? without : [...without, key];
+        return next.length === 0 ? ["all"] : next;
+      });
+    }
+  };
+
+  const getFilteredMenu = () => {
+    const active = menu.filter((i) => i.active);
+    if (activeFilters.includes("all")) return active;
+    return active.filter((i) => {
+      return activeFilters.every((f) => {
+        if (f === "bestSeller") return i.bestSeller;
+        if (f === "unliRice") return i.unliRice;
+        return i.category === f;
+      });
+    });
+  };
+
+  const getFilteredCategories = () => {
+    const hasCategoryFilter = activeFilters.some((f) => !["all", "bestSeller", "unliRice"].includes(f));
+    if (hasCategoryFilter) {
+      return activeFilters.filter((f) => !["all", "bestSeller", "unliRice"].includes(f));
+    }
+    return ["Chicken", "BBQ", "Pork", "Beef", "Fish", "Seafood", "Dessert", "Drinks", "Other"];
+  };
 
   useEffect(() => {
     fetch("/api/menu")
@@ -137,7 +186,7 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
         <section id="best-sellers" className="px-6 py-16">
           <div className="max-w-[1200px] mx-auto text-center mb-10">
             <span className="inline-block py-1 px-3 rounded-full bg-accent-yellow/20 text-accent-yellow text-xs font-bold tracking-wider uppercase border border-accent-yellow/30">
-              {showFullMenu ? "Complete Menu" : "✔ Charcoal Grilled"}
+              {showFullMenu ? "Complete Menu" : "🔥 Our Best Sellers"}
             </span>
             <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {showFullMenu ? "Explore Our Full Menu" : "Our Best Sellers"}
@@ -145,71 +194,185 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
             <p className="text-slate-600 dark:text-slate-400 text-lg mt-2">
               {showFullMenu
                 ? "Browse through our complete selection of charcoal-grilled specialties and favorites."
-                : "Experience the taste of tradition with our crowd-favorite grilled specialties."}
+                : "Experience the taste of tradition with our crowd-favorite Inanag specialties."}
             </p>
           </div>
           <div className="max-w-[1200px] mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {(showFullMenu
-                ? menu.filter((i) => i.active)
-                : menu.filter((i) => i.active && i.bestSeller).length > 0
-                ? menu.filter((i) => i.active && i.bestSeller)
-                : menu.filter((i) => i.active).slice(0, 3)
-              ).map((i) => (
-                <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
-                  <div className="absolute top-4 right-4 z-10 flex flex-wrap justify-end gap-2">
-                    {i.bestSeller && (
-                      <span className="inline-flex items-center gap-1 bg-amber-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
-                        <span className="material-symbols-outlined text-[14px]">star</span>
-                        BEST SELLER
-                      </span>
-                    )}
-                    {i.unliRice && (
-                      <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20">
-                        <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
-                        UNLI RICE
-                      </span>
-                    )}
-                  </div>
-                  <div 
-                    className="relative h-64 overflow-hidden cursor-pointer group/img"
-                    onClick={() => setSelectedItem(i)}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1] opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-white text-4xl scale-75 group-hover/img:scale-100 transition-transform duration-500">zoom_in</span>
-                    </div>
-                    <img src={i.image} alt={i.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  </div>
-                  <div className="p-6 flex flex-col flex-grow">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex flex-col">
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{i.name}</h3>
-                        {!showFullMenu && i.bestSeller && (
-                          <span className="text-[10px] font-black uppercase tracking-widest text-accent-yellow flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[12px]">star</span>
-                            Top Pick
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-xl font-bold text-primary">₱{i.price}</span>
-                    </div>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">{i.description}</p>
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
-                      <div className="flex gap-1 text-accent-yellow">
-                        <span className="material-symbols-outlined text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-[18px]">star_half</span>
-                      </div>
-                      <button className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                        <span className="material-symbols-outlined">add</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+            {/* Filter Buttons */}
+            <div className="flex flex-wrap justify-center gap-2 mb-8">
+              {menuFilters.map((f) => (
+                <button
+                  key={f.key}
+                  onClick={() => toggleFilter(f.key)}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                    activeFilters.includes(f.key)
+                      ? "bg-primary text-white shadow-md shadow-primary/30"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-[16px]">{f.icon}</span>
+                  {f.label}
+                </button>
               ))}
             </div>
+            {!showFullMenu ? (
+              // Best Sellers View (3-5 items max)
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {(activeFilters.includes("all")
+                  ? (menu.filter((i) => i.active && i.bestSeller).length > 0
+                    ? menu.filter((i) => i.active && i.bestSeller).slice(0, 5)
+                    : menu.filter((i) => i.active).slice(0, 5))
+                  : getFilteredMenu().slice(0, 5)
+                ).map((i) => (
+                  <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
+                    <div className="absolute top-4 right-4 z-10 flex flex-wrap justify-end gap-2">
+                      {i.bestSeller && (
+                        <span className="inline-flex items-center gap-1 bg-amber-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
+                          <span className="material-symbols-outlined text-[14px]">star</span>
+                          BEST SELLER
+                        </span>
+                      )}
+                      {i.unliRice && (
+                        <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20">
+                          <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
+                          UNLI RICE
+                        </span>
+                      )}
+                    </div>
+                    <div 
+                      className="relative h-64 overflow-hidden cursor-pointer group/img"
+                      onClick={() => setSelectedItem(i)}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1] opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-white text-4xl scale-75 group-hover/img:scale-100 transition-transform duration-500">zoom_in</span>
+                      </div>
+                      <img src={i.image} alt={i.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+                    <div className="p-6 flex flex-col flex-grow">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex flex-col">
+                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{i.name}</h3>
+                          {i.bestSeller && (
+                            <span className="text-[10px] font-black uppercase tracking-widest text-accent-yellow flex items-center gap-1">
+                              <span className="material-symbols-outlined text-[12px]">star</span>
+                              Top Pick
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xl font-bold text-primary">₱{i.price}</span>
+                      </div>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">{i.description}</p>
+                      <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
+                        <div className="flex gap-1 text-accent-yellow">
+                          <span className="material-symbols-outlined text-[18px]">star</span>
+                          <span className="material-symbols-outlined text-[18px]">star</span>
+                          <span className="material-symbols-outlined text-[18px]">star</span>
+                          <span className="material-symbols-outlined text-[18px]">star</span>
+                          <span className="material-symbols-outlined text-[18px]">star_half</span>
+                        </div>
+                        <button className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                          <span className="material-symbols-outlined">add</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              // Full Menu Categorized View
+              <div className="space-y-12">
+                {getFilteredCategories().map((category) => {
+                  const categoryItems = menu.filter((i) => {
+                    if (!i.active || i.category !== category) return false;
+                    if (!activeFilters.includes("all")) {
+                      return activeFilters.every((f) => {
+                        if (f === "bestSeller") return i.bestSeller;
+                        if (f === "unliRice") return i.unliRice;
+                        return true;
+                      });
+                    }
+                    return true;
+                  });
+                  if (categoryItems.length === 0) return null;
+                  
+                  const categoryTitles: Record<string, string> = {
+                    "Chicken": "🍗 Chicken (Inanag Specials)",
+                    "BBQ": "🍢 BBQ",
+                    "Pork": "🐖 Pork",
+                    "Beef": "🐄 Beef",
+                    "Fish": "🐟 Fish & Seafood",
+                    "Seafood": "🦐 Seafood",
+                    "Dessert": "🍰 Dessert",
+                    "Drinks": "🥤 Drinks",
+                    "Other": "🍽️ Other"
+                  };
+                  
+                  return (
+                    <div key={category} className="space-y-6">
+                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white border-b-2 border-primary/20 pb-2">
+                        {categoryTitles[category] || category}
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {categoryItems.map((i) => (
+                          <div key={i.id} className="group card-hover-lift bg-white dark:bg-[#1a2c20] rounded-[20px] overflow-hidden border border-slate-100 dark:border-primary/10 shadow-soft-green flex flex-col h-full relative">
+                            <div className="absolute top-4 right-4 z-10 flex flex-wrap justify-end gap-2">
+                              {i.bestSeller && (
+                                <span className="inline-flex items-center gap-1 bg-amber-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
+                                  <span className="material-symbols-outlined text-[14px]">star</span>
+                                  BEST SELLER
+                                </span>
+                              )}
+                              {i.unliRice && (
+                                <span className="inline-flex items-center gap-1 bg-accent-yellow text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20">
+                                  <span className="material-symbols-outlined text-[14px]">rice_bowl</span>
+                                  UNLI RICE
+                                </span>
+                              )}
+                            </div>
+                            <div 
+                              className="relative h-64 overflow-hidden cursor-pointer group/img"
+                              onClick={() => setSelectedItem(i)}
+                            >
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1] opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-white text-4xl scale-75 group-hover/img:scale-100 transition-transform duration-500">zoom_in</span>
+                              </div>
+                              <img src={i.image} alt={i.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                            </div>
+                            <div className="p-6 flex flex-col flex-grow">
+                              <div className="flex justify-between items-start mb-2">
+                                <div className="flex flex-col">
+                                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{i.name}</h3>
+                                  {i.bestSeller && (
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-accent-yellow flex items-center gap-1">
+                                      <span className="material-symbols-outlined text-[12px]">star</span>
+                                      Best Seller
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-xl font-bold text-primary">₱{i.price}</span>
+                              </div>
+                              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-grow">{i.description}</p>
+                              <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
+                                <div className="flex gap-1 text-accent-yellow">
+                                  <span className="material-symbols-outlined text-[18px]">star</span>
+                                  <span className="material-symbols-outlined text-[18px]">star</span>
+                                  <span className="material-symbols-outlined text-[18px]">star</span>
+                                  <span className="material-symbols-outlined text-[18px]">star</span>
+                                  <span className="material-symbols-outlined text-[18px]">star_half</span>
+                                </div>
+                                <button className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                                  <span className="material-symbols-outlined">add</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <div className="mt-12 text-center">
               <a
                 href="#best-sellers"
@@ -219,7 +382,7 @@ served the way we do it best: perfectly grilled, rich in flavor, and smoky goodn
                 }}
                 className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all"
               >
-                {showFullMenu ? "Show Best Sellers" : "View Full Menu"}
+                {showFullMenu ? "👈 Show Best Sellers" : "View Full Menu"}
                 <span className={`material-symbols-outlined text-[20px] transition-transform ${showFullMenu ? "rotate-180" : ""}`}>
                   {showFullMenu ? "arrow_back" : "arrow_forward"}
                 </span>
