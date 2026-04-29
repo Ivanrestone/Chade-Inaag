@@ -1,4 +1,4 @@
-# Change Inaag — System Flow Notes
+# ChaDe Inanag — System Flow Notes
 
 ## Overview
 - Frontend: React + Vite in frontend/

@@ -43,7 +43,7 @@ function App() {
             <div className="w-8 h-8 flex items-center justify-center bg-primary rounded-lg text-white">
               <img src="/chadeinaag.jpg" alt="Restaurant Image" className="w-8 h-8 rounded-lg" />
             </div>
-            <span className="text-xl font-bold tracking-tight">CHANGE INAAG</span>
+            <span className="text-xl font-bold tracking-tight">CHADE INAAG</span>
           </a>
           <nav className="hidden md:flex items-center gap-8">
             <a className="text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary-light transition-colors" href="#home">Home</a>
@@ -76,7 +76,7 @@ function App() {
               <div className="flex flex-col gap-8 text-center lg:text-left">
                 <div className="space-y-2">
                   <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/20 text-primary text-xs font-bold uppercase tracking-wider w-fit mx-auto lg:mx-0">
-                    <span className="material-symbols-outlined text-sm">verified</span> Authentic Cebuano Taste
+                    <span className="material-symbols-outlined text-sm">verified</span> Tinuod nga Kalami sa Bukidnon
                   </span>
                   <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1]">
                     <span className="text-primary dark:text-white block">Mas Pinadako.</span>
@@ -84,7 +84,8 @@ function App() {
                     <span className="text-secondary mt-2 block bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary">Buyag sa Kalami!</span>
                   </h1>
                   <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-lg mx-auto lg:mx-0 pt-4 leading-relaxed">
-                    Experience the boldest flavors of Cebuano grilled chicken. Authentic taste, bigger servings, and that signature smoky aroma you love.
+                 <strong>Proudly Bukidnon. Home of authentic Inanag</strong> — a lumad word meaning sinugba,
+served the way we do it best: perfectly grilled, rich in flavor, and smoky goodness.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
@@ -108,7 +109,7 @@ function App() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-secondary">check_circle</span>
-                    <span>Native Sauce</span>
+                    <span>Sulit, Lami Pa</span>
                   </div>
                 </div>
               </div>
@@ -136,7 +137,7 @@ function App() {
         <section id="best-sellers" className="px-6 py-16">
           <div className="max-w-[1200px] mx-auto text-center mb-10">
             <span className="inline-block py-1 px-3 rounded-full bg-accent-yellow/20 text-accent-yellow text-xs font-bold tracking-wider uppercase border border-accent-yellow/30">
-              {showFullMenu ? "Complete Menu" : "Authentic Filipino Grill"}
+              {showFullMenu ? "Complete Menu" : "✔ Charcoal Grilled"}
             </span>
             <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {showFullMenu ? "Explore Our Full Menu" : "Our Best Sellers"}
@@ -313,7 +314,7 @@ function App() {
           <div className="max-w-[960px] mx-auto">
             <div className="flex flex-col gap-4 text-center items-center">
               <span className="text-primary font-bold tracking-wider uppercase text-sm">Experience the Best</span>
-              <h2 className="text-primary-dark tracking-tight text-[32px] font-black leading-tight md:text-5xl max-w-[720px]">Why Choose Change Inaag?</h2>
+              <h2 className="text-primary-dark tracking-tight text-[32px] font-black leading-tight md:text-5xl max-w-[720px]">Why Choose ChaDe Inaag?</h2>
               <p className="text-slate-600 text-lg font-normal leading-relaxed max-w-[600px]">We bring the authentic smoky, savory taste of Filipino favorites grilled to absolute perfection, right to your table.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
@@ -355,7 +356,7 @@ function App() {
                 <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                 Open Today: 10:00 AM - 9:00 PM
               </div>
-              <h2 className="text-white tracking-tight text-3xl md:text-5xl font-black leading-tight max-w-[800px]">Kaon na ta sa Change Inaag!</h2>
+              <h2 className="text-white tracking-tight text-3xl md:text-5xl font-black leading-tight max-w-[800px]">Kaon na ta sa ChaDe Inaag!</h2>
               <p className="text-white/80 text-lg md:text-xl max-w-[600px]">Ready to satisfy your cravings? Order now for delivery or visit our nearest branch today!</p>
               <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center max-w-md">
                 <a className="flex items-center justify-center gap-2 rounded-full h-14 px-8 bg-white text-primary hover:bg-neutral-100 transition-colors text-base font-bold shadow-lg w-full sm:w-auto" href="#">
@@ -376,7 +377,7 @@ function App() {
         <div className="flex flex-col gap-8 px-6 py-12 text-center items-center max-w-[960px] mx-auto">
           <div className="flex items-center gap-2 text-primary-dark mb-4">
             <span className="material-symbols-outlined text-2xl">restaurant</span>
-            <span className="font-bold text-lg tracking-tight">CHANGE INAAG</span>
+            <span className="font-bold text-lg tracking-tight">CHADE INAAG</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-8">
             <a className="text-slate-500 hover:text-primary transition-colors text-sm font-medium" href="#home">Home</a>
@@ -390,7 +391,7 @@ function App() {
             <a className="text-slate-400 hover:text-primary transition-colors" href="#"><span className="sr-only">Instagram</span><svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"/></svg></a>
             <a className="text-slate-400 hover:text-primary transition-colors" href="#"><span className="sr-only">Twitter</span><svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M247.39,68.94A8,8,0,0,0,240,64H209.57A48.66,48.66,0,0,0,168.1,40a46.91,46.91,0,0,0-33.75,13.7A47.9,47.9,0,0,0,120,88v6.09C79.74,83.47,46.81,50.72,46.46,50.37a8,8,0,0,0-13.65,4.92c-4.31,47.79,9.57,79.77,22,98.18a110.93,110.93,0,0,0,21.88,24.2c-15.23,17.53-39.21,26.74-39.47,26.84a8,8,0,0,0-3.85,11.93c.75,1.12,3.75,5.05,11.08,8.72C53.51,229.7,65.48,232,80,232c70.67,0,129.72-54.42,135.75-124.44l29.91-29.9A8,8,0,0,0,247.39,68.94Zm-45,29.41a8,8,0,0,0-2.32,5.14C196,166.58,143.28,216,80,216c-10.56,0-18-1.4-23.22-3.08,11.51-6.25,27.56-17,37.88-32.48A8,8,0,0,0,92,169.08c-.47-.27-43.91-26.34-44-96,16,13,45.25,33.17,78.67,38.79A8,8,0,0,0,136,104V88a32,32,0,0,1,9.6-22.92A30.94,30.94,0,0,1,167.9,56c12.66.16,24.49,7.88,29.44,19.21A8,8,0,0,0,204.67,80h16Z"/></svg></a>
           </div>
-          <p className="text-slate-400 text-sm">© 2026 Change Inaag. All rights reserved.</p>
+          <p className="text-slate-400 text-sm">© 2026 ChaDe Inaag. All rights reserved.</p>
         </div>
       </footer>
 

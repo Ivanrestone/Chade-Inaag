@@ -43,10 +43,10 @@ export default function LoginModal({ onClose, onSuccess }: Props) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl overflow-hidden">
-              <img src="/chadeinaag.jpg" alt="Change Inaag" className="w-full h-full object-cover" />
+              <img src="/chadeinaag.jpg" alt="ChaDe Inaag" className="w-full h-full object-cover" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-primary">CHANGE INAAG</p>
+              <p className="text-xs font-semibold text-primary">CHADE INAAG</p>
               <h3 className="text-lg font-bold text-slate-900">Admin Login</h3>
             </div>
           </div>

@@ -337,7 +337,7 @@ export default function AdminPortal() {
               <div className="space-y-5">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
                   <span className="material-symbols-outlined text-base">admin_panel_settings</span>
-                  Change Inaag Admin
+                  ChaDe Inaag Admin
                 </div>
                 <h1 className="text-4xl font-black leading-tight md:text-5xl">Welcome back, Admin</h1>
                 <p className="max-w-md text-base text-white/85 md:text-lg">
@@ -409,9 +409,9 @@ export default function AdminPortal() {
       <div className="flex min-h-screen flex-col lg:flex-row">
         <aside className="w-full bg-primary px-6 py-6 text-white lg:min-h-screen lg:w-72">
           <div className="mb-8 flex items-center gap-3">
-            <img src="/chadeinaag.jpg" alt="Change Inaag" className="h-10 w-10 rounded-xl" />
+            <img src="/chadeinaag.jpg" alt="Chade Inaag" className="h-10 w-10 rounded-xl" />
             <div>
-              <h1 className="text-lg font-bold tracking-tight">CHANGE INAAG</h1>
+              <h1 className="text-lg font-bold tracking-tight">CHADE INAAG</h1>
               <p className="text-xs font-medium text-green-200">Admin Portal</p>
             </div>
           </div>
