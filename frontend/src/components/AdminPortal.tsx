@@ -552,11 +552,11 @@ export default function AdminPortal() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
                   <p className="text-xs uppercase tracking-wide text-white/75">Demo Email</p>
-                  <p className="mt-1 font-bold">{demoEmail}</p>
+          
                 </div>
                 <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
                   <p className="text-xs uppercase tracking-wide text-white/75">Demo Password</p>
-                  <p className="mt-1 font-bold">{demoPassword}</p>
+     
                 </div>
               </div>
             </div>
@@ -575,7 +575,7 @@ export default function AdminPortal() {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  placeholder="admin@gmail.com"
+                  //placeholder="admin@gmail.com"
                   autoComplete="email"
                   required
                 />

@@ -61,7 +61,7 @@ export default function LoginModal({ onClose, onSuccess }: Props) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@gmail.com"
+             // placeholder="admin@gmail.com"
               className="h-12 w-full rounded-xl border border-slate-200 px-4 text-slate-900 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
               required
             />
@@ -72,7 +72,7 @@ export default function LoginModal({ onClose, onSuccess }: Props) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="admin123"
+              //placeholder="admin123"
               className="h-12 w-full rounded-xl border border-slate-200 px-4 text-slate-900 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
               required
             />
@@ -91,11 +91,11 @@ export default function LoginModal({ onClose, onSuccess }: Props) {
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
               <p className="text-slate-500">Demo Email</p>
-              <p className="font-bold text-slate-900">{demoEmail}</p>
+   
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
               <p className="text-slate-500">Demo Password</p>
-              <p className="font-bold text-slate-900">{demoPassword}</p>
+          
             </div>
           </div>
         </div>
