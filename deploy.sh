@@ -12,6 +12,8 @@ mkdir -p logs
 echo "📦 Building frontend..."
 cd frontend
 npm install
+# Clear TypeScript cache to fix permission issues
+rm -rf node_modules/.tmp
 npm run build
 cd ..
 
