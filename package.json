@@ -1,6 +1,17 @@
 {
-  "dependencies": {
-    "dotenv": "^17.3.1",
-    "mongodb": "^7.1.0"
+  "name": "chade-inaag",
+  "version": "1.0.0",
+  "description": "Chade Inaag Restaurant Management System",
+  "type": "module",
+  "scripts": {
+    "dev": "node start-dev.js",
+    "start": "node start-dev.js",
+    "build": "cd frontend && npm run build",
+    "deploy": "chmod +x deploy.sh && ./deploy.sh",
+    "deploy:prod": "pm2 start ecosystem.config.js",
+    "stop": "pm2 stop all",
+    "restart": "pm2 restart all",
+    "logs": "pm2 logs",
+    "status": "pm2 status"
   }
 }
