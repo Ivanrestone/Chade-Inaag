@@ -8,6 +8,9 @@ npm install -g pm2
 # Create logs directory
 mkdir -p logs
 
+# Create uploads directory for backend
+mkdir -p backend/uploads
+
 # Build frontend for production
 echo "📦 Building frontend..."
 cd frontend
@@ -25,8 +28,8 @@ cd ..
 
 # Stop existing processes
 echo "🛑 Stopping existing processes..."
-pm2 stop chade-inaag-backend chade-inaag-frontend || true
-pm2 delete chade-inaag-backend chade-inaag-frontend || true
+pm2 stop chade-inaag-backend || true
+pm2 delete chade-inaag-backend || true
 
 # Start production processes
 echo "🚀 Starting production processes..."
@@ -43,3 +46,11 @@ echo "📊 Status: pm2 status"
 echo "📋 Logs: pm2 logs"
 echo "🔄 Restart: pm2 restart all"
 echo "🛑 Stop: pm2 stop all"
+echo ""
+echo "⚠️  IMPORTANT SETUP STEPS:"
+echo "1. Copy nginx config: sudo cp nginx.conf /etc/nginx/sites-available/chadeinaag"
+echo "2. Enable site: sudo ln -s /etc/nginx/sites-available/chadeinaag /etc/nginx/sites-enabled/"
+echo "3. Remove default site: sudo rm /etc/nginx/sites-enabled/default"
+echo "4. Get SSL certificate: sudo certbot --nginx -d chadeinaag.website -d www.chadeinaag.website"
+echo "5. Test nginx: sudo nginx -t"
+echo "6. Reload nginx: sudo systemctl reload nginx"

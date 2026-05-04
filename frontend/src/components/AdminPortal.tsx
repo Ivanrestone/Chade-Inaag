@@ -229,70 +229,7 @@ export default function AdminPortal() {
       .catch(() => {});
   }, []);
 
-  const [facebookEmbeds, setFacebookEmbeds] = useState<FacebookEmbedItem[]>([]);
-  const [newEmbed, setNewEmbed] = useState<Omit<FacebookEmbedItem, "id">>({
-    order: 0,
-    iframeSrc: "",
-    width: "500",
-    height: "588",
-    active: true,
-  });
 
-  useEffect(() => {
-    fetch("/api/facebook/embeds")
-      .then((r) => r.json())
-      .then((items) => {
-        if (Array.isArray(items)) setFacebookEmbeds(items);
-      })
-      .catch(() => {});
-  }, []);
-
-  // const addFacebookEmbed = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-  //   setError("");
-  //   try {
-  //     const res = await fetch("/api/facebook/embeds", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-  //       body: JSON.stringify(newEmbed),
-  //     });
-  //     const data = await res.json();
-  //     if (!res.ok) throw new Error(data.error || "Failed to add embed");
-  //     setFacebookEmbeds((current) => [...current, { ...data, id: data._id }]);
-  //     setNewEmbed({ order: facebookEmbeds.length + 1, iframeSrc: "", width: "500", height: "588", active: true });
-  //     setSuccessMsg("Facebook embed added successfully!");
-  //     setTimeout(() => setSuccessMsg(""), 3000);
-  //   } catch (err: any) {
-  //     setError(err.message || "Failed to add embed");
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
-  // const updateEmbedStatus = (id: string, active: boolean) => {
-  //   fetch(`/api/facebook/embeds/${id}`, {
-  //     method: "PATCH",
-  //     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-  //     body: JSON.stringify({ active }),
-  //   })
-  //     .then((r) => r.json())
-  //     .then((updated) => {
-  //       setFacebookEmbeds((current) => current.map((e) => (e.id === id ? updated : e)));
-  //     });
-  // };
-
-  // const deleteFacebookEmbedItem = (id: string) => {
-  //   if (!confirm("Delete this Facebook embed?")) return;
-  //   fetch(`/api/facebook/embeds/${id}`, {
-  //     method: "DELETE",
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   })
-  //     .then((r) => r.json())
-  //     .then(() => {
-  //       setFacebookEmbeds((current) => current.filter((e) => e.id !== id));
-  //     });
-  // };
 
   const toggleBranchFeature = (feature: string) => {
     setNewBranch((prev) => ({

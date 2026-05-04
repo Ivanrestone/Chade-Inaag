@@ -8,5 +8,7 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:4000'
     }
-  }
+  },
+  // For production, API calls go through nginx proxy on same domain
+  // No additional configuration needed
 })
