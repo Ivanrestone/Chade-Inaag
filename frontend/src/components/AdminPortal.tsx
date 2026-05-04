@@ -15,8 +15,8 @@ type MenuItem = {
   image: string;
 };
 
-const demoEmail = "admin@gmail.com";
-const demoPassword = "admin123";
+// const demoEmail = "admin@gmail.com";
+// const demoPassword = "admin123";
 const authStorageKey = "change_inaag_admin_auth";
 
 const categories = ["Chicken", "Pork", "Beef", "Fish", "Seafood", "BBQ", "Dessert", "Drinks", "Other"];
@@ -192,7 +192,7 @@ export default function AdminPortal() {
     features: [],
     mapUrl: "",
   });
-  const [editingBranchId, setEditingBranchId] = useState<string | null>(null);
+  // const [editingBranchId, setEditingBranchId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/menu")
@@ -259,7 +259,7 @@ export default function AdminPortal() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to add embed");
-      setFacebookEmbeds((current) => [...current, data]);
+      setFacebookEmbeds((current) => [...current, { ...data, id: data._id }]);
       setNewEmbed({ order: facebookEmbeds.length + 1, iframeSrc: "", width: "500", height: "588", active: true });
       setSuccessMsg("Facebook embed added successfully!");
       setTimeout(() => setSuccessMsg(""), 3000);
@@ -281,18 +281,25 @@ export default function AdminPortal() {
         setFacebookEmbeds((current) => current.map((e) => (e.id === id ? updated : e)));
       });
   };
+  //     body: JSON.stringify({ active }),
+  //   })
+  //     .then((r) => r.json())
+  //     .then((updated) => {
+  //       setFacebookEmbeds((current) => current.map((e) => (e.id === id ? updated : e)));
+  //     });
+  // };
 
-  const deleteFacebookEmbedItem = (id: string) => {
-    if (!confirm("Delete this Facebook embed?")) return;
-    fetch(`/api/facebook/embeds/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then(() => {
-        setFacebookEmbeds((current) => current.filter((e) => e.id !== id));
-      });
-  };
+  // const deleteFacebookEmbedItem = (id: string) => {
+  //   if (!confirm("Delete this Facebook embed?")) return;
+  //   fetch(`/api/facebook/embeds/${id}`, {
+  //     method: "DELETE",
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   })
+  //     .then((r) => r.json())
+  //     .then(() => {
+  //       setFacebookEmbeds((current) => current.filter((e) => e.id !== id));
+  //     });
+  // };
 
   const toggleBranchFeature = (feature: string) => {
     setNewBranch((prev) => ({

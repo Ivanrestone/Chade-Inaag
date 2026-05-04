@@ -28,7 +28,7 @@ pm2 delete chade-inaag-backend chade-inaag-frontend || true
 
 # Start production processes
 echo "🚀 Starting production processes..."
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 
 # Save PM2 configuration
 pm2 save

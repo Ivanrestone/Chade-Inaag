@@ -6,8 +6,8 @@ type Props = {
   onSuccess: () => void;
 };
 
-const demoEmail = "admin@gmail.com";
-const demoPassword = "admin123";
+// const demoEmail = "admin@gmail.com";
+// const demoPassword = "admin123";
 
 export default function LoginModal({ onClose, onSuccess }: Props) {
   const [email, setEmail] = useState("");

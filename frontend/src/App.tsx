@@ -71,10 +71,10 @@ function FacebookCarousel() {
     setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
-  const visiblePosts = facebookPosts.slice(
-    currentIndex * itemsPerSlide,
-    currentIndex * itemsPerSlide + itemsPerSlide
-  );
+  // const visiblePosts = facebookPosts.slice(
+  //   currentIndex * itemsPerSlide,
+  //   currentIndex * itemsPerSlide + itemsPerSlide
+  // );
 
   return (
     <div className="relative">
